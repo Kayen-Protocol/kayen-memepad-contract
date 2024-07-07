@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.7.0;
+
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+
+contract CommonToken is ERC20Upgradeable {
+    
+     function initialize(string memory name, string memory symbol, uint256 initialSupply) public virtual initializer {
+        __ERC20_init(name, symbol);
+        _mint(_msgSender(), initialSupply);
+    }
+
+}

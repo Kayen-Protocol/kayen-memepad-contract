@@ -1,0 +1,21 @@
+[submodule "packages/staking/lib/forge-std"]
+	path = packages/staking/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/djump-staking/lib/forge-std"]
+	path = packages/djump-staking/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/trading-event/lib/forge-std"]
+	path = packages/trading-event/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/fan-token/lib/forge-std"]
+	path = packages/fan-token/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/uniswap/v2-core/lib/forge-std"]
+	path = packages/uniswap/v2-core/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/uniswap/v2-periphery/lib/forge-std"]
+	path = packages/uniswap/v2-periphery/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/uniswap/lib/lib/forge-std"]
+	path = packages/uniswap/lib/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std

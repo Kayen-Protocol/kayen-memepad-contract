@@ -1,0 +1,7 @@
+@kayen/uniswap-v3-periphery=node_modules/@kayen/uniswap-v3-periphery/
+@kayen/uniswap-v3-core=node_modules/@kayen/uniswap-v3-core/
+@kayen/uniswap-v2-periphery=node_modules/@kayen/uniswap-v2-periphery/
+@kayen/uniswap-v2-core=node_modules/@kayen/uniswap-v2-core/
+@kayen/uniswap-lib=node_modules/@kayen/uniswap-lib/
+@kayen/token=node_modules/@kayen/token
+@openzeppelin=node_modules/@openzeppelin
