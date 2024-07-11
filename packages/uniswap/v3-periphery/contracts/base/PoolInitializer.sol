@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.8.15;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Factory.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Factory.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 
 import './PeripheryImmutableState.sol';
 import '../interfaces/IPoolInitializer.sol';
@@ -20,7 +20,7 @@ abstract contract PoolInitializer is IPoolInitializer, PeripheryImmutableState {
         pool = IUniswapV3Factory(factory).getPool(token0, token1, fee);
 
         if (pool == address(0)) {
-            pool = IUniswapV3Factory(factory).createPool(token0, token1, fee, 0);
+            pool = IUniswapV3Factory(factory).createPool(token0, token1, fee);
             IUniswapV3Pool(pool).initialize(sqrtPriceX96);
         } else {
             (uint160 sqrtPriceX96Existing, , , , , , ) = IUniswapV3Pool(pool).slot0();

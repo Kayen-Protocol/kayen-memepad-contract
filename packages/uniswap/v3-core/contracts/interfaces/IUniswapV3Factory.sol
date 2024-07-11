@@ -62,8 +62,7 @@ interface IUniswapV3Factory {
     function createPool(
         address tokenA,
         address tokenB,
-        uint24 fee,
-        uint256 startTimestamp
+        uint24 fee
     ) external returns (address pool);
 
     /// @notice Updates the owner of the factory

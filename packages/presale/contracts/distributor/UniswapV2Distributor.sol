@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.7;
 
-import "forge-std/console.sol";
-
 import {Distributor} from "./Distributor.sol";
 import {Configuration} from "../Configuration.sol";
 

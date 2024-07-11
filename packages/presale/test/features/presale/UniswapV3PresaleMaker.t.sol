@@ -22,6 +22,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 10e18,
                 0,
                 0,
+                0,
                 ""
             );
         }
@@ -45,6 +46,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 100e18,
                 0,
                 0,
+                0,
                 ""
             );
         }
@@ -64,6 +66,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 -177285,
                 1000000000e18,
                 10e18,
+                0,
                 0,
                 0,
                 ""

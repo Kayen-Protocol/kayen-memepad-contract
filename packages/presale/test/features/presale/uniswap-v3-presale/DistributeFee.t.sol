@@ -2,8 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
-
 import {IPresale} from "../../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../../contracts/presale/UniswapV3Presale.sol";
 
@@ -62,6 +60,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
                 10e18,
                 0,
                 0,
+                0,
                 ""
             );
         }
@@ -83,13 +82,12 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.stopPrank();
 
         assertTrue(presale.getProgress() == 100);
-        vm.startPrank(user1);
+        vm.startPrank(deployer);
         {
             presale.distribute(mockDistributor, abi.encode(user1));
         }
         vm.stopPrank();
         
-        console.log(bera.balanceOf(configuration.feeVault()));
         assertTrue(bera.balanceOf(configuration.feeVault()) >= 10e18 * 1e6 / 100 / 1e6 * 99 / 100);
     }
 }

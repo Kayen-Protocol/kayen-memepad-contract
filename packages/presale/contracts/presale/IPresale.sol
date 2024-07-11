@@ -8,7 +8,7 @@ interface IPresale {
     function getProgress() external view returns (uint256);
     function isBondingCurveEnd() external view returns (bool);
     function distribute(IDistributor distributor, bytes calldata data) external;
-    function info() external returns (PresaleInfo memory);
+    function info() external view returns (PresaleInfo memory);
     function isEnd() external view returns (bool);
 
     struct PresaleInfo {
@@ -26,6 +26,8 @@ interface IPresale {
         uint24 toTreasuryRate;
 
         bool isEnd;
+        uint256 startTimestamp;
+        bool isNewToken;
     }
 
     event Distributed();

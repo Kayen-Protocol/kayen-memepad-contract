@@ -6,17 +6,23 @@ import "../presale/IPresale.sol";
 import "../Configuration.sol";
 
 contract PresaleManager is Ownable {
-    mapping(address => IPresale) public presales;
+    mapping(address => bool) public isRegistered;
+    mapping(address => address) public presales;
+    mapping(address => address) public presalesByPool;
     Configuration config;
 
     constructor(Configuration _config) Ownable() {
         config = _config;
     }
+
     function register(IPresale presale) external {
         require(config.presaleMakers(msg.sender), "PresaleManager: FORBIDDEN");
         (address tokenAddress, string memory name, string memory symbol, uint256 totalSupply) = presale.tokenInfo();
+        require(!isRegistered[tokenAddress], "PresaleManager: ALREADY_REGISTERED");
         IPresale.PresaleInfo memory presaleInfo =  presale.info();
-        presales[tokenAddress] = presale;
+        presales[tokenAddress] = address(presale);
+        isRegistered[tokenAddress] = true;
+        presalesByPool[presaleInfo.pool] = address(presale);
         emit PresaleCreated(
             name,
             symbol,
@@ -30,17 +36,26 @@ contract PresaleManager is Ownable {
         );
     }
 
-    function getPresale(address token) external view returns (IPresale) {
-        return presales[token];
+    function isPending(address target) external view returns (bool) {
+        IPresale presale = getPresale(target);
+        return presale.info().startTimestamp > block.timestamp;
     }
 
-    function getProgress(address tokenAddress) public view returns (uint256) {
-        return presales[tokenAddress].getProgress();
+    function getPresale(address target) public view returns (IPresale) {
+        if(address(presales[target]) == address(0)) {
+            return IPresale(presalesByPool[target]);
+        }
+        return IPresale(presales[target]);
     }
 
-    function isBondingCurveEnd(address tokenAddress) public view returns (bool) {
-        return presales[tokenAddress].isBondingCurveEnd();
+    function getProgress(address target) public view returns (uint256) {
+        return getPresale(target).getProgress();
     }
+
+    function isBondingCurveEnd(address target) public view returns (bool) {
+        return getPresale(target).isBondingCurveEnd();
+    }
+
 
     event PresaleCreated(
         string name,

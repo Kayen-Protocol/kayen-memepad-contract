@@ -24,7 +24,6 @@ interface IUniswapV3PoolDeployer {
             address token1,
             uint24 fee,
             int24 tickSpacing,
-            uint256 startTimestamp,
             IPoolConfiguration config
         );
 }

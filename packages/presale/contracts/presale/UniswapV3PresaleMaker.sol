@@ -4,6 +4,7 @@ pragma solidity >=0.8.7;
 import "../Configuration.sol";
 import "./IPresale.sol";
 import "@kayen/token/contracts/TokenFactory.sol";
+import "@kayen/token/contracts/CommonToken.sol";
 
 import {Quoter} from "@kayen/uniswap-v3-periphery/contracts/lens/Quoter.sol";
 
@@ -41,6 +42,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         IUniswapV3Factory _poolFactory,
         INonfungiblePositionManager _positionManager,
         ISwapRouter _swapRouter,
+        Quoter _quoter,
         address _weth
     ) {
         config = _config;
@@ -51,7 +53,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         implementation = new UniswapV3Presale();
         swapRouter = _swapRouter;
         weth = _weth;
-        quoter = new Quoter(address(poolFactory), weth);
+        quoter = _quoter;
     }
 
     function startWithNewToken(
@@ -66,16 +68,19 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 amountToRaise,
         uint256 amountForBuyInstantly,
         uint24 toTreasuryRate,
+        uint256 startTimestamp,
         string memory data
     ) external payable returns (IPresale) {
         address token = tokenFactory.create(name, symbol, totalSupply);
-        IERC20 tokenInstance = IERC20(token);
+        CommonToken tokenInstance = CommonToken(token);
+        tokenInstance.putBlacklist(config);
         uint256 minterAllocation = totalSupply - amountToSale;
         if (minterAllocation > 0) {
             tokenInstance.transfer(msg.sender, minterAllocation);
         }
         return
             _create(
+                true,
                 paymentToken,
                 token,
                 sqrtPriceX96,
@@ -85,6 +90,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
                 amountToRaise,
                 amountForBuyInstantly,
                 toTreasuryRate,
+                startTimestamp,
                 data
             );
     }
@@ -99,6 +105,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 amountToRaise,
         uint256 amountForBuyInstantly,
         uint24 toTreasuryRate,
+        uint256 startTimestamp,
         string memory data
     ) external payable returns (IPresale) {
         require(
@@ -107,6 +114,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         );
         return
             _create(
+                false,
                 paymentToken,
                 saleToken,
                 sqrtPriceX96,
@@ -116,11 +124,13 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
                 amountToRaise,
                 amountForBuyInstantly,
                 toTreasuryRate,
+                startTimestamp,
                 data
             );
     }
 
     function _create(
+        bool isNewToken,
         address paymentToken,
         address saleToken,
         uint160 sqrtPriceX96,
@@ -130,6 +140,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 amountToRaise,
         uint256 amountForBuyInstantly,
         uint24 toTreasuryRate,
+        uint256 startTimestamp,
         string memory data
     ) internal returns (IPresale) {
         require(toTreasuryRate <= config.getMaxTreasuryRate(), "UniswapV3PresaleMaker: treasury rate too high");
@@ -155,7 +166,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         require(amountToSale > 0, "UniswapV3PresaleMaker: sale amount must be greater than 0");
 
         (address token0, address token1) = UniswapV2Library.sortTokens(paymentToken, saleToken);
-        address pool = poolFactory.createPool(token0, token1, poolFee, 0);
+        address pool = poolFactory.createPool(token0, token1, poolFee);
         IUniswapV3Pool(pool).initialize(sqrtPriceX96);
 
         assertValidParams(
@@ -206,7 +217,9 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             amountToSale: amountToSale,
             data: data,
             toTreasuryRate: toTreasuryRate,
-            isEnd: false
+            isEnd: false,
+            startTimestamp: startTimestamp,
+            isNewToken: isNewToken
         });
 
         ERC1967Proxy proxy = new ERC1967Proxy(
@@ -215,6 +228,10 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         );
         IPresale presale = IPresale(address(proxy));
         positionManager.transferFrom(address(this), address(presale), tokenId);
+
+        if(isNewToken) {
+            CommonToken(saleToken).transferOwnership(address(presale));
+        }
 
         presaleManager.register(presale);
 

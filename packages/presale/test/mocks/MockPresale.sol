@@ -31,7 +31,7 @@ contract MockPresale is IPresale {
     function distribute(IDistributor distributor, bytes calldata data) external override {
 
     }
-    function info() external override returns (PresaleInfo memory) {
+    function info() external view override returns (PresaleInfo memory) {
         return (
             PresaleInfo(
                 address(1),
@@ -42,7 +42,9 @@ contract MockPresale is IPresale {
                 100e18,
                 "data",
                 0,
-                false
+                false,
+                0,
+                true
             )
         );
     }

@@ -2,8 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
-
 import {MockDistributor} from "../../mocks/MockDistributor.sol";
 import {IPresale} from "../../../contracts/presale/IPresale.sol";
 import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
@@ -42,6 +40,7 @@ contract UniswapV2DistributorTest is Setup {
                 10e18,
                 0,
                 0,
+                0,
                 ""
             );
         }
@@ -76,7 +75,16 @@ contract UniswapV2DistributorTest is Setup {
             );
         }
         vm.stopPrank();
+
         vm.startPrank(user2);
+        {
+            (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
+            vm.expectRevert();
+            presale.distribute(uniswapV3Distributor, abi.encode(sqrtPriceX96, poolFee));
+        }
+        vm.stopPrank();
+
+        vm.startPrank(user1);
         {
             (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
             presale.distribute(uniswapV3Distributor, abi.encode(sqrtPriceX96, poolFee));
@@ -97,7 +105,7 @@ contract UniswapV2DistributorTest is Setup {
                 )
             );
             IUniswapV3Pool pool = IUniswapV3Pool(
-                externalV3Factory.createPool(address(weth), presale.info().token, poolFee, 0)
+                externalV3Factory.createPool(address(weth), presale.info().token, poolFee)
             );
             pool.initialize(7922816251426433759354395);
             IERC20(presale.info().token).approve(address(externalV3PositionManager), amountOut);

@@ -38,6 +38,7 @@ contract UniswapV2DistributorTest is Setup {
                 10e18,
                 0,
                 0,
+                0,
                 ""
             );
         }
@@ -70,7 +71,7 @@ contract UniswapV2DistributorTest is Setup {
         }
         vm.stopPrank();
         assertTrue(presale.getProgress() == 100);
-        vm.startPrank(user2);
+        vm.startPrank(user1);
         {
             presale.distribute(uniswapV2Distributor, abi.encode(user1));
         }

@@ -2,8 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
-
 import "../Setup.sol";
 
 import "../mocks/MockPresale.sol";

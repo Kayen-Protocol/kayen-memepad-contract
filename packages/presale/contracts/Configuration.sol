@@ -2,13 +2,14 @@
 pragma solidity >=0.8.7;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import {IPoolConfiguration} from "@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol";
+import "@kayen/token/contracts/IBlacklist.sol";
 
-contract Configuration is IPoolConfiguration, Ownable {
+contract Configuration is Ownable, IBlacklist {
     mapping(address => bool) public paymentTokenWhitlist;
     mapping(address => bool) public distributorWhitelist;
     mapping(address => bool) public presaleMakers;
     mapping(address => bool) public isPoolPaused;
+    mapping(address => bool) public transferBlacklist;
     bool public isAllPoolPaused;
 
     address public feeVault;
@@ -82,11 +83,11 @@ contract Configuration is IPoolConfiguration, Ownable {
         return feeVault;
     }
 
-    function isPaused(address pool) override external view returns (bool) {
+    function isPaused(address pool) external view returns (bool) {
         return isPoolPaused[pool] || isPausedAll();
     }
 
-    function isPausedAll() override public view returns (bool) {
+    function isPausedAll() public view returns (bool) {
         return isAllPoolPaused;
     }
 
@@ -120,7 +121,7 @@ contract Configuration is IPoolConfiguration, Ownable {
         tradeFee[token] = _tradeFee;
     }
 
-    function getTradeFee(address token0, address token1) override external view returns (uint24) {
+    function getTradeFee(address token0, address token1) external view returns (uint24) {
         uint24 fee0 = tradeFee[token0];
         uint24 fee1 = tradeFee[token1];
         if(fee0 == 0 && fee1 == 0) {
@@ -146,6 +147,18 @@ contract Configuration is IPoolConfiguration, Ownable {
     function assertDistributeFee(uint24 _tradeFee) internal view {
         // max 2%
         require(_tradeFee <= 1e6 / 50, "Configuration: trade fee must be less than 1%");
+    }
+
+    function putTransferBlacklist(address target) external onlyOwner {
+        transferBlacklist[target] = true;
+    }
+
+    function removeTransferBlacklist(address target) external onlyOwner {
+        transferBlacklist[target] = false;
+    }
+
+    function isTransferBlacklisted(address target) external view returns (bool) {
+        return transferBlacklist[target];
     }
 
 }

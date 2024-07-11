@@ -2,8 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
-
 import {MockDistributor} from "../../mocks/MockDistributor.sol";
 import {IPresale} from "../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../contracts/presale/UniswapV3Presale.sol";
@@ -35,6 +33,7 @@ contract UniswapV3PresaleTest is Setup {
                 10e18,
                 0,
                 0,
+                0,
                 ""
             );
             presale2 = uniswapV3PresaleMaker.startWithNewToken(
@@ -47,6 +46,7 @@ contract UniswapV3PresaleTest is Setup {
                 23027,
                 1000000000e18,
                 10e18,
+                0,
                 0,
                 0,
                 ""

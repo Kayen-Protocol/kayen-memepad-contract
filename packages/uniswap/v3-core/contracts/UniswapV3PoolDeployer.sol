@@ -13,7 +13,6 @@ contract UniswapV3PoolDeployer is IUniswapV3PoolDeployer {
         address token1;
         uint24 fee;
         int24 tickSpacing;
-        uint256 startTimestamp;
         IPoolConfiguration config;
     }
 
@@ -33,10 +32,9 @@ contract UniswapV3PoolDeployer is IUniswapV3PoolDeployer {
         address token1,
         uint24 fee,
         int24 tickSpacing,
-        uint256 startTimestamp,
         IPoolConfiguration config
     ) internal returns (address pool) {
-        parameters = Parameters({factory: factory, token0: token0, token1: token1, fee: fee, tickSpacing: tickSpacing, startTimestamp: startTimestamp, config: config});
+        parameters = Parameters({factory: factory, token0: token0, token1: token1, fee: fee, tickSpacing: tickSpacing, config: config});
         pool = address(new UniswapV3Pool{salt: keccak256(abi.encode(token0, token1, fee))}());
         delete parameters;
     }

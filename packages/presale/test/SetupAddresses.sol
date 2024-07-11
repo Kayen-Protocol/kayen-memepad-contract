@@ -2,7 +2,6 @@ pragma solidity >=0.6.12;
 pragma abicoder v2;
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
 
 import {MockERC20} from "./mocks/MockERC20.sol";
 import {WETH9} from "./mocks/WETH9.sol";
@@ -18,6 +17,7 @@ import {Quoter} from "@kayen/uniswap-v3-periphery/contracts/lens/Quoter.sol";
 import {UniswapV2Factory} from "@kayen/uniswap-v2-core/contracts/UniswapV2Factory.sol";
 import {UniswapV2Router01} from "@kayen/uniswap-v2-periphery/contracts/UniswapV2Router01.sol";
 
+import {PresalePoolManager} from "../contracts/PresalePoolManager.sol";
 import {UniswapV2Distributor} from "../contracts/distributor/UniswapV2Distributor.sol";
 import {UniswapV3Distributor} from "../contracts/distributor/UniswapV3Distributor.sol";
 import {Configuration} from "../contracts/Configuration.sol";
@@ -42,6 +42,8 @@ contract SetupAddresses is Test {
     TokenFactory tokenFactory;
     UniswapV3Factory poolFactory;
     SwapRouter swapRouter;
+    Quoter quoter;
+    PresalePoolManager presalePoolManager;
     NonfungiblePositionManager positionManager;
     UniswapV3PresaleMaker uniswapV3PresaleMaker;
     UniswapV2Distributor uniswapV2Distributor;
@@ -72,14 +74,19 @@ contract SetupAddresses is Test {
             configuration = new Configuration(feeVault);
             presaleManager = new PresaleManager(configuration);
             tokenFactory = new TokenFactory();
-            poolFactory = new UniswapV3Factory(configuration);
+
+            presalePoolManager = new PresalePoolManager(configuration, presaleManager);
+            poolFactory = new UniswapV3Factory(presalePoolManager);
+            quoter = new Quoter(address(poolFactory), address(weth));
+            presalePoolManager.putQuoter(address(quoter));
+
             NonfungibleTokenPositionDescriptor tokenDescriptor = new NonfungibleTokenPositionDescriptor(address(weth), bytes32("WETH"));
             positionManager = new NonfungiblePositionManager(address(poolFactory), address(weth), address(tokenDescriptor));
             swapRouter = new SwapRouter(address(poolFactory), address(weth));
-            uniswapV3PresaleMaker = new UniswapV3PresaleMaker(configuration, presaleManager, tokenFactory, poolFactory, positionManager, swapRouter, address(weth));
+            uniswapV3PresaleMaker = new UniswapV3PresaleMaker(configuration, presaleManager, tokenFactory, poolFactory, positionManager, swapRouter, quoter, address(weth));
 
             NonfungibleTokenPositionDescriptor tokenDescriptor2 = new NonfungibleTokenPositionDescriptor(address(weth), bytes32("WETH"));
-            externalV3Factory = new UniswapV3Factory(configuration);
+            externalV3Factory = new UniswapV3Factory(presalePoolManager);
             externalV3PositionManager = new NonfungiblePositionManager(address(externalV3Factory), address(weth), address(tokenDescriptor2));
             externalV3SwapRouter = new SwapRouter(address(externalV3Factory), address(weth));
             externalV3Quoter = new Quoter(address(externalV3Factory), address(weth));

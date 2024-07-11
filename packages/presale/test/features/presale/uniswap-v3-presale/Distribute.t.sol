@@ -2,8 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
-
 import {IPresale} from "../../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../../contracts/presale/UniswapV3Presale.sol";
 
@@ -37,7 +35,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         }
         vm.stopPrank();
 
-        vm.startPrank(user2);
+        vm.startPrank(user1);
         {
             presale.distribute(mockDistributor, abi.encode(user1));
         }

@@ -44,7 +44,6 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     /// @inheritdoc IUniswapV3PoolImmutables
     uint24 public immutable override fee;
     
-    uint256 public immutable startTimestamp;
     IPoolConfiguration public immutable poolConfiguration;
 
     /// @inheritdoc IUniswapV3PoolImmutables
@@ -98,16 +97,6 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
     /// @inheritdoc IUniswapV3PoolState
     Oracle.Observation[65535] public override observations;
 
-    modifier pending() {
-        require(startTimestamp == 0 || block.timestamp >= startTimestamp, "Pending");
-        _;
-    }
-
-    modifier notPaused() {
-        require(!poolConfiguration.isPaused(address(this)), "Paused");
-        _;
-    }
-
     /// @dev Mutually exclusive reentrancy protection into the pool to/from a method. This method also prevents entrance
     /// to a function before the pool is initialized. The reentrancy guard is required throughout the contract because
     /// we use balance checks to determine the payment status of interactions such as mint, swap and flash.
@@ -126,7 +115,7 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
 
     constructor() {
         int24 _tickSpacing;
-        (factory, token0, token1, fee, _tickSpacing, startTimestamp, poolConfiguration) = IUniswapV3PoolDeployer(msg.sender).parameters();
+        (factory, token0, token1, fee, _tickSpacing, poolConfiguration) = IUniswapV3PoolDeployer(msg.sender).parameters();
         tickSpacing = _tickSpacing;
 
         maxLiquidityPerTick = Tick.tickSpacingToMaxLiquidityPerTick(_tickSpacing);
@@ -622,7 +611,10 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
         int256 amountSpecified,
         uint160 sqrtPriceLimitX96,
         bytes calldata data
-    ) external override noDelegateCall pending notPaused returns (int256 amount0, int256 amount1) {
+    ) external override noDelegateCall returns (int256 amount0, int256 amount1) {
+
+        poolConfiguration.beforeSwap(address(this), recipient);
+
         if (amountSpecified == 0) revert AS();
 
         Slot0 memory slot0Start = slot0;

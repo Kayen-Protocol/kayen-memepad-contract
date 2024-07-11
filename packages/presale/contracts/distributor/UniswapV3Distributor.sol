@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.7;
 
-import "forge-std/console.sol";
-
 import {Configuration} from "../Configuration.sol";
 import {Distributor} from "./Distributor.sol";
 
@@ -52,7 +50,7 @@ contract UniswapV3Distributor is Distributor {
         uint256 tokenBBalance = tokenBInstance.balanceOf(address(this));
 
         if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
-            factory.createPool(tokenA, tokenB, fee, 0);
+            factory.createPool(tokenA, tokenB, fee);
         }
 
         address poolAddress = factory.getPool(tokenA, tokenB, fee);
