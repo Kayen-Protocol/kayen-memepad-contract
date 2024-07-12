@@ -2,10 +2,10 @@
 pragma solidity >=0.7.0;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/BitMath.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/BitMath.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 import 'base64-sol/base64.sol';
 import './HexStrings.sol';

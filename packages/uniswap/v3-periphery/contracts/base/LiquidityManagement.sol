@@ -2,9 +2,9 @@
 pragma solidity >=0.8.15;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Factory.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/callback/IUniswapV3MintCallback.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Factory.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/callback/IUniswapV3MintCallback.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
 
 import '../libraries/PoolAddress.sol';
 import '../libraries/CallbackValidation.sol';

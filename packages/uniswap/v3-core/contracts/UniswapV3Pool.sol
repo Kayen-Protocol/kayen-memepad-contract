@@ -830,7 +830,7 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
 
         emit Swap(msg.sender, recipient, amount0, amount1, state.sqrtPriceX96, state.liquidity, state.tick);
 
-        _collectAllProtocol();
+        collectProtocol();
 
         slot0.unlocked = true;
 
@@ -897,50 +897,23 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
         }
     }
 
-    /// @inheritdoc IUniswapV3PoolOwnerActions
-    function collectProtocol(
-        address recipient,
-        uint128 amount0Requested,
-        uint128 amount1Requested
-    ) external override lock onlyFactoryOwner returns (uint128 amount0, uint128 amount1) {
-        amount0 = amount0Requested > protocolFees.token0 ? protocolFees.token0 : amount0Requested;
-        amount1 = amount1Requested > protocolFees.token1 ? protocolFees.token1 : amount1Requested;
+    function collectProtocol() internal lock returns (uint128 amount0, uint128 amount1) {
+        amount0 = protocolFees.token0;
+        amount1 = protocolFees.token1;
 
         unchecked {
             if (amount0 > 0) {
                 if (amount0 == protocolFees.token0) amount0--; // ensure that the slot is not cleared, for gas savings
                 protocolFees.token0 -= amount0;
-                TransferHelper.safeTransfer(token0, recipient, amount0);
+                TransferHelper.safeTransfer(token0, poolConfiguration.getFeeVault(), amount0);
             }
             if (amount1 > 0) {
                 if (amount1 == protocolFees.token1) amount1--; // ensure that the slot is not cleared, for gas savings
                 protocolFees.token1 -= amount1;
-                TransferHelper.safeTransfer(token1, recipient, amount1);
+                TransferHelper.safeTransfer(token1, poolConfiguration.getFeeVault(), amount1);
             }
         }
 
-        emit CollectProtocol(msg.sender, recipient, amount0, amount1);
-    }
-
-    function _collectAllProtocol() internal {
-        address recipient = poolConfiguration.getFeeVault();
-        uint128 amount0 = protocolFees.token0;
-        uint128 amount1 = protocolFees.token1;
-
-        unchecked {
-            if (amount0 > 0) {
-                if (amount0 == protocolFees.token0) amount0--; // ensure that the slot is not cleared, for gas savings
-                protocolFees.token0 -= amount0;
-                TransferHelper.safeTransfer(token0, recipient, amount0);
-            }
-            if (amount1 > 0) {
-                if (amount1 == protocolFees.token1) amount1--; // ensure that the slot is not cleared, for gas savings
-                protocolFees.token1 -= amount1;
-                TransferHelper.safeTransfer(token1, recipient, amount1);
-            }
-        }
-
-        emit CollectProtocol(msg.sender, recipient, amount0, amount1);
-
+        emit CollectProtocol(msg.sender, poolConfiguration.getFeeVault(), amount0, amount1);
     }
 }

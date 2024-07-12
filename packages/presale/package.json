@@ -4,11 +4,14 @@
   "license": "MIT",
   "scripts": {
     "compile": "forge compile",
-    "test": "forge test"
+    "test": "forge test",
+    "deploy": "yarn hardhat deploy --tags mainnet --network chiliz_spicy",
+    "deploy:forge": "forge script --chain 88882 scripts/deploy.sol:Deploy --rpc-url $CHILIZ_RPC_URL --broadcast"
   },
   "devDependencies": {
     "@eth-optimism/smock": "^1.1.5",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "4.9.3",
     "@openzeppelin/hardhat-upgrades": "^1.9.0",
@@ -32,8 +35,9 @@
     "eslint-plugin-promise": "^5.1.0",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.7.2",
-    "hardhat": "^2.9.3",
+    "hardhat": "^2.22.6",
     "hardhat-abi-exporter": "^2.2.0",
+    "hardhat-dependency-compiler": "^1.2.1",
     "hardhat-gas-reporter": "^1.0.4",
     "mocha-logger": "^1.0.8",
     "prettier": "^2.4.1",

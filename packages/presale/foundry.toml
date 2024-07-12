@@ -12,4 +12,6 @@ remappings = [
 ]
 solc_version = "0.8.22"
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+[rpc_endpoints]
+88882 = "${CHILIZ_RPC_URL}"
+

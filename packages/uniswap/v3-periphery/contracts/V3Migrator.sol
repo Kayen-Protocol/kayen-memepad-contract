@@ -2,7 +2,7 @@
 pragma solidity >=0.8.15;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
 
 import './interfaces/INonfungiblePositionManager.sol';
 

@@ -1,8 +1,8 @@
 pragma solidity >=0.8.7;
 
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol';
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
-import 'node_modules/@kayen/uniswap-lib/contracts/FixedPoint.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
+import '@kayen/uniswap-lib/contracts/FixedPoint.sol';
 
 import '../libraries/UniswapV2OracleLibrary.sol';
 import '../libraries/UniswapV2Library.sol';

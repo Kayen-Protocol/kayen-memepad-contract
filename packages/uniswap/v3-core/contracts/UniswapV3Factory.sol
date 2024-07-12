@@ -6,7 +6,6 @@ import {IUniswapV3Factory} from "./interfaces/IUniswapV3Factory.sol";
 import {UniswapV3PoolDeployer} from "./UniswapV3PoolDeployer.sol";
 import {NoDelegateCall} from "./NoDelegateCall.sol";
 
-import {UniswapV3Pool} from "./UniswapV3Pool.sol";
 import {IPoolConfiguration} from "./interfaces/IPoolConfiguration.sol";
 
 /// @title Canonical Uniswap V3 factory

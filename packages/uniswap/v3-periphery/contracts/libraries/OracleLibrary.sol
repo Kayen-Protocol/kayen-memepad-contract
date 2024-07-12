@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0 <0.9.0;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 
 /// @title Oracle library
 /// @notice Provides functions to integrate with V3 pool oracle

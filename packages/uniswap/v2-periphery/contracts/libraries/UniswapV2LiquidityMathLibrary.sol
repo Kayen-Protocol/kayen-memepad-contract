@@ -1,9 +1,9 @@
 pragma solidity >=0.5.0;
 
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol';
-import 'node_modules/@kayen/uniswap-lib/contracts/Babylonian.sol';
-import 'node_modules/@kayen/uniswap-lib/contracts/FullMath.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol';
+import '@kayen/uniswap-lib/contracts/Babylonian.sol';
+import '@kayen/uniswap-lib/contracts/FullMath.sol';
 
 import './SafeMath.sol';
 import './UniswapV2Library.sol';

@@ -1,6 +1,6 @@
 pragma solidity >=0.8.7;
 
-import 'node_modules/@kayen/uniswap-lib/contracts/TransferHelper.sol';
+import '@kayen/uniswap-lib/contracts/TransferHelper.sol';
 
 import './interfaces/IUniswapV2Migrator.sol';
 import './interfaces/V1/IUniswapV1Factory.sol';

@@ -1,6 +1,6 @@
 pragma solidity >=0.5.0;
 
-import "node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import {UniswapV2Pair} from "@kayen/uniswap-v2-core/contracts/UniswapV2Pair.sol";
 
 import "./SafeMath.sol";

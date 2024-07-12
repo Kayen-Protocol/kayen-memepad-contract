@@ -2,9 +2,9 @@
 pragma solidity >=0.8.15;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/FixedPoint128.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/FixedPoint128.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/FullMath.sol';
 
 import './interfaces/INonfungiblePositionManager.sol';
 import './interfaces/INonfungibleTokenPositionDescriptor.sol';

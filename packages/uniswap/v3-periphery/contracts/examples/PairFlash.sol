@@ -2,7 +2,7 @@
 pragma solidity >=0.8.15;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/callback/IUniswapV3FlashCallback.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/callback/IUniswapV3FlashCallback.sol';
 
 import '../base/PeripheryPayments.sol';
 import '../base/PeripheryImmutableState.sol';

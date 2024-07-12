@@ -2,9 +2,9 @@
 pragma solidity >=0.8.15;
 pragma abicoder v2;
 
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/SafeCast.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
-import 'node_modules/@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/SafeCast.sol';
+import '@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 
 import './interfaces/ISwapRouter.sol';
 import './base/PeripheryImmutableState.sol';

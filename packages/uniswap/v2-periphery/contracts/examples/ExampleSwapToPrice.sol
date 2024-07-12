@@ -1,8 +1,8 @@
 pragma solidity >=0.8.7;
 
-import 'node_modules/@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
-import 'node_modules/@kayen/uniswap-lib/contracts/Babylonian.sol';
-import 'node_modules/@kayen/uniswap-lib/contracts/TransferHelper.sol';
+import '@kayen/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol';
+import '@kayen/uniswap-lib/contracts/Babylonian.sol';
+import '@kayen/uniswap-lib/contracts/TransferHelper.sol';
 
 import '../libraries/UniswapV2LiquidityMathLibrary.sol';
 import '../interfaces/IERC20.sol';
