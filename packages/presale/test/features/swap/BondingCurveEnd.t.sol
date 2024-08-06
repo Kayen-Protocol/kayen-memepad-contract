@@ -33,21 +33,22 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.deal(user2, 30 ether);
     }
 
     function test_stop_trade_after_bonding_curve_end() external {
         vm.startPrank(user1);
         {
-            swapRouter.exactInput{value: 10e18}(ISwapRouter.ExactInputParams(
+            swapRouter.exactInput{value: 11e18}(ISwapRouter.ExactInputParams(
                 abi.encodePacked(address(weth), poolFee, presale.info().token),
                 address(this),
                 block.timestamp + 10,
-                10e18,
+                11e18,
                 0
             ));
         }

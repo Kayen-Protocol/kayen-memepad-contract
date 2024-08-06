@@ -3,13 +3,17 @@ pragma solidity >=0.8.7;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@kayen/token/contracts/IBlacklist.sol";
+import "./distributor/IDistributor.sol";
 
 contract Configuration is Ownable, IBlacklist {
-    mapping(address => bool) public paymentTokenWhitlist;
+    mapping(address => bool) public paymentTokenWhitelist;
     mapping(address => bool) public distributorWhitelist;
+    IDistributor[] public distributors;
     mapping(address => bool) public presaleMakers;
     mapping(address => bool) public isPoolPaused;
     mapping(address => bool) public transferBlacklist;
+    
+    uint256 public maxPresaleDuration = 365 days;
     bool public isAllPoolPaused;
 
     address public feeVault;
@@ -38,19 +42,27 @@ contract Configuration is Ownable, IBlacklist {
     }
 
     function allowTokenForPayment(address token) external onlyOwner {
-        paymentTokenWhitlist[token] = true;
+        paymentTokenWhitelist[token] = true;
     }
 
     function disallowTokenForPayment(address token) external onlyOwner {
-        paymentTokenWhitlist[token] = false;
+        paymentTokenWhitelist[token] = false;
     }
 
     function allowDistributor(address distributor) external onlyOwner {
         distributorWhitelist[distributor] = true;
+        distributors.push(IDistributor(distributor));
     }
 
     function disallowDistributor(address distributor) external onlyOwner {
         distributorWhitelist[distributor] = false;
+        for(uint256 i = 0; i < distributors.length; i++) {
+            if(address(distributors[i]) == distributor) {
+                distributors[i] = distributors[distributors.length - 1];
+                distributors.pop();
+                break;
+            }
+        }
     }
 
     function isDistributorWhitelisted(address distributor) external view returns (bool) {
@@ -58,10 +70,14 @@ contract Configuration is Ownable, IBlacklist {
     }
 
     function putDefaultDistributionFeeRate(uint24 feeRate) external onlyOwner {
+        // max 30%
+        require(feeRate <= 1e6 / 100 * 30, "Configuration: default distribution fee rate must be less than 30%");
         defaultDistributionFeeRate = feeRate;
     }
 
     function putDistributionFeeRateForToken(address token, uint24 feeRate) external onlyOwner {
+        // max 30%
+        require(feeRate <= 1e6 / 100 * 30, "Configuration: default distribution fee rate must be less than 30%");
         distributionFeeRate[token] = feeRate;
     }
 
@@ -108,6 +124,8 @@ contract Configuration is Ownable, IBlacklist {
     }
 
     function putMintingFee(uint256 fee) external onlyOwner {
+        // max 30%
+        require(fee <= 1000e18, "Configuration: minting fee must be less than 1000");
         mintingFee = fee;
     }
     
@@ -153,12 +171,23 @@ contract Configuration is Ownable, IBlacklist {
         transferBlacklist[target] = true;
     }
 
+    function putComputedTransferBlacklist(address token1, address token2) external {
+        require(presaleMakers[msg.sender], "Configuration: FORBIDDEN");
+        for(uint256 i = 0; i < distributors.length; i++) {
+            transferBlacklist[distributors[i].getPoolAddress(token1, token2)] = true;
+        }
+    }
+
     function removeTransferBlacklist(address target) external onlyOwner {
         transferBlacklist[target] = false;
     }
 
     function isTransferBlacklisted(address target) external view returns (bool) {
         return transferBlacklist[target];
+    }
+
+    function putMaxPresaleDuration(uint256 duration) external onlyOwner {
+        maxPresaleDuration = duration;
     }
 
 }

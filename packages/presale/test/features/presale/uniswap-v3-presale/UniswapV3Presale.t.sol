@@ -19,7 +19,7 @@ contract UniswapV3PresaleTest is Setup {
 
     function setUp() public override {
         super.setUp();
-        mockDistributor = new MockDistributor();
+        mockDistributor = new MockDistributor(user1);
         vm.startPrank(deployer);
         {
             configuration.allowDistributor(address(mockDistributor));
@@ -40,10 +40,11 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.deal(user2, 30 ether);
     }
 }

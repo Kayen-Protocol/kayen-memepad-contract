@@ -17,18 +17,18 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
 
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(this),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
         }
         vm.stopPrank();
-        assertTrue(presale.getProgress() == 100);
+        assertTrue(presale.getProgress() >= 1e6);
     }
 
 }

@@ -10,36 +10,42 @@ import {IUniswapV3Factory} from "@kayen/uniswap-v3-core/contracts/interfaces/IUn
 import {TickMath} from "@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol";
 import {IUniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {IQuoter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/IQuoter.sol";
 
 import {LiquidityAmounts} from "@kayen/uniswap-v3-periphery/contracts/libraries/LiquidityAmounts.sol";
 import {TickMath} from "@kayen/uniswap-v3-core/contracts/libraries/TickMath.sol";
 
 contract UniswapV3Distributor is Distributor {
-    IUniswapV3Factory factory;
-    INonfungiblePositionManager positionManager;
-    uint256 maxPriceDiffRatio = 5e16;
-    IQuoter quoter;
+    using SafeERC20 for IERC20;
+
+    uint24 fee = 100;
+    IUniswapV3Factory immutable factory;
+    INonfungiblePositionManager immutable positionManager;
 
     constructor(
         Configuration _config,
         IUniswapV3Factory _factory,
-        INonfungiblePositionManager _positionManager,
-        IQuoter _quoter
+        INonfungiblePositionManager _positionManager
     ) Distributor(_config) {
         factory = _factory;
         positionManager = _positionManager;
-        quoter = _quoter;
+    }
+
+    function getPoolAddress(address token0, address token1) external returns (address) {
+        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
+        if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
+            factory.createPool(token0, token1, fee);
+        }
+        return address(factory.getPool(tokenA, tokenB, fee));
     }
 
     function _doDistribute(
         address token0,
         address token1,
-        uint256 expectedPriceZeroToOne,
-        bytes calldata data
+        uint160 sqrtPriceX96,
+        uint256 deadline
     ) internal override {
-        (uint160 sqrtPriceX96, uint24 fee) = abi.decode(data, (uint160, uint24));
 
         (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
 
@@ -56,20 +62,13 @@ contract UniswapV3Distributor is Distributor {
         address poolAddress = factory.getPool(tokenA, tokenB, fee);
         IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
 
-        (uint160 currentSqrtPriceX96, , , , , , ) = pool.slot0();
-        if (currentSqrtPriceX96 > 0) {
-            uint256 price = quoter.quoteExactInputSingle(tokenA, tokenB, fee, 10 ** ERC20(tokenA).decimals(), 0);
-            uint256 pad = 10 ** ERC20(tokenB).decimals();
-            uint256 diffRatio = expectedPriceZeroToOne > price
-                ? (pad * expectedPriceZeroToOne) / price
-                : (pad * price) / expectedPriceZeroToOne;
-            require(diffRatio <= maxPriceDiffRatio, "UniswapV2Distributor: price too low");
-        } else {
-            pool.initialize(sqrtPriceX96);
-        }
+        uint256 liquidity = pool.liquidity();
+        require(liquidity == 0, "UniswapV3Distributor: pool already has liquidity");
+        pool.initialize(sqrtPriceX96);
 
-        tokenAInstance.approve(address(positionManager), tokenABalance);
-        tokenBInstance.approve(address(positionManager), tokenBBalance);
+        tokenAInstance.forceApprove(address(positionManager), tokenABalance);
+        tokenBInstance.forceApprove(address(positionManager), tokenBBalance);
+
         int24 tickSpacing = pool.tickSpacing();
 
         positionManager.mint(
@@ -84,7 +83,7 @@ contract UniswapV3Distributor is Distributor {
                 amount0Min: 0,
                 amount1Min: 0,
                 recipient: address(this),
-                deadline: block.timestamp + 10
+                deadline: deadline
             })
         );
     }

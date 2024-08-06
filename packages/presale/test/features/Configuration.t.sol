@@ -19,10 +19,10 @@ contract ConfigurationTest is Setup {
         assertTrue(!configuration.presaleMakers(target));
         
         configuration.allowTokenForPayment(target);
-        assertTrue(configuration.paymentTokenWhitlist(target));
+        assertTrue(configuration.paymentTokenWhitelist(target));
         
         configuration.disallowTokenForPayment(target);
-        assertTrue(!configuration.paymentTokenWhitlist(target));
+        assertTrue(!configuration.paymentTokenWhitelist(target));
         
         configuration.allowDistributor(target);
         assertTrue(configuration.distributorWhitelist(target));

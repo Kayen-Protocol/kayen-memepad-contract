@@ -15,6 +15,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`PresaleManager is deployed(${presaleManager.address})`);
 };
 
-func.tags = ["mainnet", "testnet"];
+func.tags = ["part1"];
 
 export default func;

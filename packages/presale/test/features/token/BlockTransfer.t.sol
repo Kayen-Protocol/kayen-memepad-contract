@@ -19,7 +19,7 @@ contract BlockTransferTest is Setup {
 
     function setUp() public override {
         super.setUp();
-        mockDistributor = new MockDistributor();
+        mockDistributor = new MockDistributor(user1);
         vm.startPrank(deployer);
         {
             configuration.allowDistributor(address(mockDistributor));
@@ -41,21 +41,22 @@ contract BlockTransferTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.deal(user2, 30 ether);
     }
 
     function test_block_transfer() external {
         vm.startPrank(user1);
         {
-            swapRouter.exactInput{value: 10e18}(ISwapRouter.ExactInputParams(
+            swapRouter.exactInput{value: 11e18}(ISwapRouter.ExactInputParams(
                 abi.encodePacked(address(weth), poolFee, presale.info().token),
                 address(this),
                 block.timestamp + 10,
-                10e18,
+                11e18,
                 0
             ));
             IERC20 tokenInstance = IERC20(presale.info().token);
@@ -82,15 +83,15 @@ contract BlockTransferTest is Setup {
     function test_block_transfer_off_after_distribute() external {
         vm.startPrank(user1);
         {
-            swapRouter.exactInput{value: 10e18}(ISwapRouter.ExactInputParams(
+            swapRouter.exactInput{value: 11e18}(ISwapRouter.ExactInputParams(
                 abi.encodePacked(address(weth), poolFee, presale.info().token),
                 address(this),
                 block.timestamp + 10,
-                10e18,
+                11e18,
                 0
             ));
             
-            presale.distribute(mockDistributor, abi.encode(user1));
+            presale.distribute(mockDistributor, block.timestamp + 100);
             IERC20(presale.info().token).transfer(user2, 10e18);
         }
         vm.stopPrank();

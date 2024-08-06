@@ -15,6 +15,7 @@ contract Setup is Test, SetupAddresses {
             poolFactory.enableFeeAmount(100, 1);
             externalV3Factory.enableFeeAmount(100, 1);
             configuration.putDefaultDistributionFeeRate(0);
+            configuration.allowTokenForPayment(address(0));
             configuration.allowTokenForPayment(address(weth));
             configuration.allowTokenForPayment(address(bera));
             configuration.putPresaleMaker(address(uniswapV3PresaleMaker));

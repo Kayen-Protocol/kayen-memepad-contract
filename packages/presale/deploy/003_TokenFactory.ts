@@ -14,6 +14,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`TokenFactory is deployed(${tokenFactory.address})`);
 };
 
-func.tags = ["mainnet", "testnet"];
+func.tags = ["part1"];
 
 export default func;

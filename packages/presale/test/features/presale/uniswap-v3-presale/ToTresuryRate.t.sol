@@ -17,7 +17,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.startPrank(user);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
-                address(weth),
+                address(0),
                 "Trump Frog",
                 "TROG",
                 totalSupply,
@@ -29,6 +29,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
                 0,
                 toTresuryRato,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
@@ -36,12 +37,12 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
 
         vm.startPrank(user2);
         {
-            swapRouter.exactInput{value: 10e18}(
+            swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(user2),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
@@ -51,8 +52,8 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
 
         vm.startPrank(user);
         {
-            assertTrue(presale.getProgress() >= 100);
-            presale.distribute(uniswapV2Distributor, abi.encode(user1));
+            assertTrue(presale.getProgress() >= 1e6);
+            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
 
             uint256 expectedEth = 10e18 / 2 * 99e16 / 1e18;
             uint256 expectedToken = (totalSupply - IERC20(presale.info().token).balanceOf(user2)) / 2  * 99e16 / 1e18;

@@ -3,6 +3,7 @@ pragma solidity >=0.7.5;
 pragma abicoder v2;
 
 import '@kayen/uniswap-v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol';
+import '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 
 /// @title Router token swapping functionality
 /// @notice Functions for swapping tokens via Uniswap V3
@@ -17,6 +18,12 @@ interface ISwapRouter is IUniswapV3SwapCallback {
         uint256 amountOutMinimum;
         uint160 sqrtPriceLimitX96;
     }
+
+    function getPool(
+        address tokenA,
+        address tokenB,
+        uint24 fee
+    ) external view returns (IUniswapV3Pool);
 
     /// @notice Swaps `amountIn` of one token for as much as possible of another token
     /// @param params The parameters necessary for the swap, encoded as `ExactInputSingleParams` in calldata
