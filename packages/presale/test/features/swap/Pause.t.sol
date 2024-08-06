@@ -6,9 +6,9 @@ import {MockDistributor} from "../../mocks/MockDistributor.sol";
 import {IPresale} from "../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../contracts/presale/UniswapV3Presale.sol";
 
-import {PoolAddress} from "@starz/uniswap-v3-periphery/contracts/libraries/PoolAddress.sol";
+import {PoolAddress} from "@kayen/uniswap-v3-periphery/contracts/libraries/PoolAddress.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ISwapRouter} from "@starz/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
 
 import "../../Setup.sol";
 

@@ -33,6 +33,19 @@ contract UniswapV2Distributor is Distributor {
         return factory.createPair(token0, token1);
     }
 
+    function canDistribute(address token0, address token1) public view override returns (bool) {
+        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
+
+        address pairAddress = factory.getPair(tokenA, tokenB);
+        if (pairAddress != address(0)) {
+            IUniswapV2Pair pair = IUniswapV2Pair(pairAddress);
+            (uint112 reserveA, uint112 reserveB, uint32 blockTimestampLast) = pair.getReserves();
+            return reserveA == 0 && reserveB == 0;
+        }
+
+        return true;
+    }
+
     function _doDistribute(address token0, address token1, uint160 sqrtXPrice96, uint256 deadline) internal override {
         (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
 
@@ -42,13 +55,7 @@ contract UniswapV2Distributor is Distributor {
         uint256 tokenABalance = tokenAInstance.balanceOf(address(this));
         uint256 tokenBBalance = tokenBInstance.balanceOf(address(this));
 
-        address pairAddress = factory.getPair(tokenA, tokenB);
-        if (pairAddress != address(0)) {
-            IUniswapV2Pair pair = IUniswapV2Pair(pairAddress);
-            (uint112 reserveA, uint112 reserveB, uint32 blockTimestampLast) = pair.getReserves();
-            require(reserveA == 0, "UniswapV2Distributor: pair already has liquidity");
-            require(reserveB == 0, "UniswapV2Distributor: pair already has liquidity");
-        }
+        require(canDistribute(token0, token1), "UniswapV2Distributor: pair already has liquidity");
 
         tokenAInstance.forceApprove(address(router), tokenABalance);
         tokenBInstance.forceApprove(address(router), tokenBBalance);

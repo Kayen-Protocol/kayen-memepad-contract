@@ -5,6 +5,7 @@ import { Configuration } from "./Configuration.sol";
 import { PresaleManager } from "./presale-manager/PresaleManager.sol";
 import { IPoolConfiguration } from "@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import {IDistributor} from "./distributor/IDistributor.sol";
 
 contract PresalePoolManager is IPoolConfiguration, Ownable {
     Configuration config;
@@ -30,6 +31,20 @@ contract PresalePoolManager is IPoolConfiguration, Ownable {
             require(!manager.isBondingCurveEnd(pool), "PresalePoolManager: Bonding curve end");
             require(!checkIsPending(pool), "PresalePoolManager: Pool is pending");
         }
+    }
+
+    function afterSwap(address pool, uint256 deadline) external {
+        if(!manager.isBondingCurveEnd(pool)) {
+            return;
+        }
+        address distributor = config.defaultDistributor();
+        if(distributor == address(0)) {
+            return;
+        }
+        if(manager.getPresale(pool).canDistribute(distributor)) {
+            manager.getPresale(pool).distribute(distributor, deadline);
+        }
+
     }
 
     function isWhitelistedMaker(address maker) external view returns (bool) {

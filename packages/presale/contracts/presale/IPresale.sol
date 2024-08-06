@@ -8,7 +8,8 @@ interface IPresale {
     function getProgress() external view returns (uint256);
     function getRaisedAmount() external view returns (uint256);
     function isBondingCurveEnd() external view returns (bool);
-    function distribute(IDistributor distributor, uint256 deadline) external;
+    function distribute(address distributor, uint256 deadline) external;
+    function canDistribute(address distributor) external view returns (bool);
     function info() external view returns (PresaleInfo memory);
     function isEnd() external view returns (bool);
     function isExpired() external view returns (bool);

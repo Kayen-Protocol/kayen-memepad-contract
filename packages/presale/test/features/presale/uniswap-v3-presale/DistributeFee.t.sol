@@ -36,7 +36,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         assertTrue(presale.getProgress() >= 1e6);
         vm.startPrank(user1);
         {
-            presale.distribute(mockDistributor, block.timestamp + 100);
+            presale.distribute(address(mockDistributor), block.timestamp + 100);
         }
         vm.stopPrank();
         assertTrue(weth.balanceOf(configuration.feeVault()) >= 10e18 * 5e6 / 100 / 1e6 * 99 / 100);
@@ -85,7 +85,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         assertTrue(presale.getProgress() >= 1e6);
         vm.startPrank(deployer);
         {
-            presale.distribute(mockDistributor, block.timestamp + 100);
+            presale.distribute(address(mockDistributor), block.timestamp + 100);
         }
         vm.stopPrank();
         
