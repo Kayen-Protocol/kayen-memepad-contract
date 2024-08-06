@@ -15,8 +15,8 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
     function test_buy_instantly() external {
         vm.startPrank(user2);
         {
-            presale = uniswapV3PresaleMaker.startWithNewToken{value: 11e18}(
-                address(weth),
+            presale = uniswapV3PresaleMaker.startWithNewToken{value: 1e18}(
+                address(0),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,
@@ -28,11 +28,12 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
                 1e18,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        assertTrue(presale.getProgress() == 10);
+        assertTrue(presale.getProgress() >= 99e3);
     }
 
 }

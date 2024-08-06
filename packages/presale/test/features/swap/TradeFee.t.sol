@@ -43,19 +43,20 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.deal(user2, 30 ether);
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(this),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
@@ -81,6 +82,7 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
@@ -125,6 +127,7 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }

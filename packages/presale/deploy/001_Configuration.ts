@@ -16,6 +16,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`Configuration is deployed(${configuration.address})`);
 };
 
-func.tags = ["mainnet", "testnet"];
+func.tags = ["part1"];
 
 export default func;

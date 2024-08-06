@@ -9,18 +9,20 @@ import {Path} from "@kayen/uniswap-v3-periphery/contracts/libraries/Path.sol";
 import {IUniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import {INonfungiblePositionManager} from "@kayen/uniswap-v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {UniswapV2Library} from "@kayen/uniswap-v2-periphery/contracts/libraries/UniswapV2Library.sol";
 
 import "../../Setup.sol";
 
 contract UniswapV2DistributorTest is Setup {
+    using Path for bytes;
+
     IPresale presale;
     MockDistributor mockDistributor;
     uint24 poolFee = 100;
-    using Path for bytes;
 
     function setUp() public override {
         super.setUp();
-        mockDistributor = new MockDistributor();
+        mockDistributor = new MockDistributor(user);
         vm.startPrank(deployer);
         {
             configuration.allowDistributor(address(mockDistributor));
@@ -29,7 +31,7 @@ contract UniswapV2DistributorTest is Setup {
         vm.startPrank(user1);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
-                address(weth),
+                address(0),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,
@@ -41,11 +43,17 @@ contract UniswapV2DistributorTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.startPrank(deployer);
+        {
+            configuration.removeTransferBlacklist(uniswapV3Distributor.getPoolAddress(presale.info().token, address(weth)));
+        }
+        vm.stopPrank();
+        vm.deal(user2, 30 ether);
     }
 
     function test_distribute() external {
@@ -54,9 +62,7 @@ contract UniswapV2DistributorTest is Setup {
         token0.transfer(address(uniswapV3Distributor), 1000000000e18);
         token1.transfer(address(uniswapV3Distributor), 1000000000e18);
 
-        (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
-
-        uniswapV3Distributor.distribute(address(token0), address(token1), 1e18, abi.encode(sqrtPriceX96, poolFee));
+        uniswapV3Distributor.distribute(address(token0), address(token1), 7922816251426433759354395, block.timestamp + 100);
     }
 
     function test_distribute_by_presale() external {
@@ -64,12 +70,12 @@ contract UniswapV2DistributorTest is Setup {
 
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(this),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
@@ -78,16 +84,14 @@ contract UniswapV2DistributorTest is Setup {
 
         vm.startPrank(user2);
         {
-            (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
             vm.expectRevert();
-            presale.distribute(uniswapV3Distributor, abi.encode(sqrtPriceX96, poolFee));
+            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
         }
         vm.stopPrank();
 
         vm.startPrank(user1);
         {
-            (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
-            presale.distribute(uniswapV3Distributor, abi.encode(sqrtPriceX96, poolFee));
+            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
         }
         vm.stopPrank();
     }
@@ -95,20 +99,21 @@ contract UniswapV2DistributorTest is Setup {
     function test_fail_distribute_when_price_differ() external {
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            address token = presale.info().token;
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
-                    abi.encodePacked(address(weth), poolFee, presale.info().token),
+                    abi.encodePacked(address(weth), poolFee, token),
                     address(user2),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
-            IUniswapV3Pool pool = IUniswapV3Pool(
-                externalV3Factory.createPool(address(weth), presale.info().token, poolFee)
-            );
+            (address token0, address token1) = UniswapV2Library.sortTokens(address(weth), token);
+            IUniswapV3Pool pool = IUniswapV3Pool(externalV3Factory.getPool(token0, token1, poolFee));
             pool.initialize(7922816251426433759354395);
-            IERC20(presale.info().token).approve(address(externalV3PositionManager), amountOut);
+            IERC20(token).approve(address(externalV3PositionManager), amountOut);
+
             externalV3PositionManager.mint(
                 INonfungiblePositionManager.MintParams({
                     token0: pool.token0(),
@@ -116,8 +121,8 @@ contract UniswapV2DistributorTest is Setup {
                     fee: pool.fee(),
                     tickLower: -100000,
                     tickUpper: 100000,
-                    amount0Desired: pool.token0() == presale.info().token ? amountOut : 0,
-                    amount1Desired: pool.token1() == presale.info().token ? amountOut : 0,
+                    amount0Desired: pool.token0() == token ? amountOut : 0,
+                    amount1Desired: pool.token1() == token ? amountOut : 0,
                     amount0Min: 0,
                     amount1Min: 0,
                     recipient: address(user2),
@@ -128,9 +133,8 @@ contract UniswapV2DistributorTest is Setup {
         vm.stopPrank();
         vm.startPrank(user2);
         {
-            (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(presale.info().pool).slot0();
             vm.expectRevert();
-            presale.distribute(uniswapV3Distributor, abi.encode(sqrtPriceX96, poolFee));
+            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
         }
         vm.stopPrank();
     }

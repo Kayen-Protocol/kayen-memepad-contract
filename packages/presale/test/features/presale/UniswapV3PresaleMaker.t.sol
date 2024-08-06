@@ -23,6 +23,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
@@ -47,6 +48,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
@@ -69,6 +71,7 @@ contract UniswapV3PresaleMakerTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }

@@ -2,5 +2,6 @@
 pragma solidity >=0.8.7;
 
 interface IDistributor {
-    function distribute(address token0, address token1, uint256 expectedPriceZeroToOne, bytes calldata data) external;
+    function distribute(address token0, address token1, uint160 sqrtPriceX96, uint256 deadline) external;
+    function getPoolAddress(address token0, address token1) external returns (address);
 }

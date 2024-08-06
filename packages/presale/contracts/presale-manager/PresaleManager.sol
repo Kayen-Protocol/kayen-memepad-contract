@@ -9,6 +9,7 @@ contract PresaleManager is Ownable {
     mapping(address => bool) public isRegistered;
     mapping(address => address) public presales;
     mapping(address => address) public presalesByPool;
+    address[] public allPresales;
     Configuration config;
 
     constructor(Configuration _config) Ownable() {
@@ -23,6 +24,7 @@ contract PresaleManager is Ownable {
         presales[tokenAddress] = address(presale);
         isRegistered[tokenAddress] = true;
         presalesByPool[presaleInfo.pool] = address(presale);
+        allPresales.push(address(presale));
         emit PresaleCreated(
             name,
             symbol,
@@ -46,6 +48,10 @@ contract PresaleManager is Ownable {
             return IPresale(presalesByPool[target]);
         }
         return IPresale(presales[target]);
+    }
+
+    function getRaisedAmount(address target) public view returns (uint256) {
+        return getPresale(target).getRaisedAmount();
     }
 
     function getProgress(address target) public view returns (uint256) {

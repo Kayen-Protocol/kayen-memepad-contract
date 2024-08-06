@@ -16,19 +16,19 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(mockDistributor, abi.encode(user1));
+            presale.distribute(mockDistributor, block.timestamp + 100);
         }
         vm.stopPrank();
 
         uint256 amountOut;
         vm.startPrank(user2);
         {
-            amountOut = swapRouter.exactInput{value: 10e18}(
+            amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(this),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
@@ -37,7 +37,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
 
         vm.startPrank(user1);
         {
-            presale.distribute(mockDistributor, abi.encode(user1));
+            presale.distribute(mockDistributor, block.timestamp + 100);
         }
         vm.stopPrank();
 

@@ -24,11 +24,19 @@ contract MockPresale is IPresale {
         return 10;
     }
 
+    function getRaisedAmount() external override view returns (uint256) {
+        return 1e18;
+    }
+
+    function isExpired() external override view returns (bool) {
+        return false;
+    }
+
     function isBondingCurveEnd() external override view returns (bool) {
         return _isEnd;
     }
 
-    function distribute(IDistributor distributor, bytes calldata data) external override {
+    function distribute(IDistributor distributor, uint256 deadline) external override {
 
     }
     function info() external view override returns (PresaleInfo memory) {

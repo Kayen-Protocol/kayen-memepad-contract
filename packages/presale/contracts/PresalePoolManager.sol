@@ -32,6 +32,10 @@ contract PresalePoolManager is IPoolConfiguration, Ownable {
         }
     }
 
+    function isWhitelistedMaker(address maker) external view returns (bool) {
+        return config.presaleMakers(maker);
+    }
+
     function putQuoter(address _quoter) external onlyOwner {
         quoter = _quoter;
     }

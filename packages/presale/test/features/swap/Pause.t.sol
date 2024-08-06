@@ -6,9 +6,9 @@ import {MockDistributor} from "../../mocks/MockDistributor.sol";
 import {IPresale} from "../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../contracts/presale/UniswapV3Presale.sol";
 
-import {PoolAddress} from "@kayen/uniswap-v3-periphery/contracts/libraries/PoolAddress.sol";
+import {PoolAddress} from "@starz/uniswap-v3-periphery/contracts/libraries/PoolAddress.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {ISwapRouter} from "@starz/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
 
 import "../../Setup.sol";
 
@@ -34,6 +34,7 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
             presale2 = uniswapV3PresaleMaker.startWithNewToken(
@@ -49,11 +50,12 @@ contract UniswapV3PresaleTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.deal(user2, 30 ether);
     }
 
     function test_pause_trade_pool() external {
@@ -67,23 +69,23 @@ contract UniswapV3PresaleTest is Setup {
             abi.encodePacked(address(weth), poolFee, presale1.info().token),
             address(this),
             block.timestamp + 10,
-            10e18,
+            11e18,
             0
         );
         ISwapRouter.ExactInputParams memory params2 = ISwapRouter.ExactInputParams(
             abi.encodePacked(address(weth), poolFee, presale2.info().token),
             address(this),
             block.timestamp + 10,
-            1e18,
+            11e18,
             0
         );
 
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            swapRouter.exactInput{value: 10e18}(params1);
+            swapRouter.exactInput{value: 11e18}(params1);
 
-            swapRouter.exactInput{value: 1e18}(params2);
+            swapRouter.exactInput{value: 11e18}(params2);
         }
         vm.stopPrank();
 
@@ -95,7 +97,7 @@ contract UniswapV3PresaleTest is Setup {
 
         vm.startPrank(user2);
         {
-            swapRouter.exactInput{value: 10e18}(params1);
+            swapRouter.exactInput{value: 11e18}(params1);
         }
         vm.stopPrank();
     }

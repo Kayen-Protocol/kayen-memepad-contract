@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity >=0.8.12;
 
-import {IUniswapV3PoolDeployer} from "./interfaces/IUniswapV3PoolDeployer.sol";
-import {IPoolConfiguration} from "./interfaces/IPoolConfiguration.sol";
+import {IUniswapV3PoolDeployer} from './IUniswapV3PoolDeployer.sol';
 
-import {UniswapV3Pool} from "./UniswapV3Pool.sol";
+import {OriginalUniswapV3Pool} from './UniswapV3Pool.sol';
 
-contract UniswapV3PoolDeployer is IUniswapV3PoolDeployer {
-    bytes32 public constant POOL_INIT_CODE_HASH = keccak256(abi.encodePacked(type(UniswapV3Pool).creationCode));
-
+contract OriginalUniswapV3PoolDeployer is IUniswapV3PoolDeployer {
     struct Parameters {
         address factory;
         address token0;
         address token1;
         uint24 fee;
         int24 tickSpacing;
-        IPoolConfiguration config;
     }
 
     /// @inheritdoc IUniswapV3PoolDeployer
@@ -33,11 +29,10 @@ contract UniswapV3PoolDeployer is IUniswapV3PoolDeployer {
         address token0,
         address token1,
         uint24 fee,
-        int24 tickSpacing,
-        IPoolConfiguration config
+        int24 tickSpacing
     ) internal returns (address pool) {
-        parameters = Parameters({factory: factory, token0: token0, token1: token1, fee: fee, tickSpacing: tickSpacing, config: config});
-        pool = address(new UniswapV3Pool{salt: keccak256(abi.encode(token0, token1, fee))}());
+        parameters = Parameters({factory: factory, token0: token0, token1: token1, fee: fee, tickSpacing: tickSpacing});
+        pool = address(new OriginalUniswapV3Pool{salt: keccak256(abi.encode(token0, token1, fee))}());
         delete parameters;
     }
 }

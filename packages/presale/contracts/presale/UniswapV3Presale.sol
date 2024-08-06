@@ -2,6 +2,9 @@
 pragma solidity >=0.8.7;
 
 import {INonfungiblePositionManager} from "@kayen/uniswap-v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
+import {PositionValue} from "@kayen/uniswap-v3-periphery/contracts/libraries/PositionValue.sol";
+import {IUniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Pool.sol";
+
 import "./Presale.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -33,35 +36,34 @@ contract UniswapV3Presale is Presale {
 
     function getProgress() public view override returns (uint256) {
         PositionInfo memory positionInfo = getPositionInfo();
-        uint256 reserve0 = IERC20(positionInfo.token0).balanceOf(_info.pool);
-        uint256 reserve1 = IERC20(positionInfo.token1).balanceOf(_info.pool);
+        uint256 raisedAmount = getRaisedAmount();
+        return (1e6 * raisedAmount) / _info.amountToRaise;
+    }
 
+    function getRaisedAmount() public view override returns (uint256) {
+        PositionInfo memory positionInfo = getPositionInfo();
+        (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(_info.pool).slot0();
+        (uint256 reserve0, uint256 reserve1) = PositionValue.total(
+            positionManager,
+            tokenId,
+            sqrtPriceX96
+        );
         if (positionInfo.token0 != _info.token) {
-            return (100 * reserve0) / _info.amountToRaise;
+            return reserve0;
         } else {
-            return (100 * reserve1) / _info.amountToRaise;
+            return reserve1;
         }
     }
 
-    function _beforeDistribute() internal override returns (address, address, uint256) {
+    function _beforeDistribute(uint256 deadline) internal override returns (address, address, uint160) {
         PositionInfo memory positionInfo = getPositionInfo();
-        uint256 expectedPriceZeroToOne = getPriceZeroToOne();
-        burnPosition();
-        return (positionInfo.token0, positionInfo.token1, expectedPriceZeroToOne);
+        (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(_info.pool).slot0();
+        burnPosition(deadline);
+        return (positionInfo.token0, positionInfo.token1, sqrtPriceX96);
     }
 
-    function getPriceZeroToOne() public returns (uint256) {
-        PositionInfo memory positionInfo = getPositionInfo();
-        return quoter.quoteExactInputSingle(
-            positionInfo.token0,
-            positionInfo.token1,
-            positionInfo.fee,
-            10 ** ERC20(positionInfo.token0).decimals(),
-            0
-        );
-    }
 
-    function burnPosition() internal {
+    function burnPosition(uint256 deadline) internal {
         PositionInfo memory position = getPositionInfo();
         positionManager.decreaseLiquidity(
             INonfungiblePositionManager.DecreaseLiquidityParams(
@@ -69,7 +71,7 @@ contract UniswapV3Presale is Presale {
                 position.liquidity,
                 0,
                 0,
-                block.timestamp + 100
+                deadline
             )
         );
         positionManager.collect(

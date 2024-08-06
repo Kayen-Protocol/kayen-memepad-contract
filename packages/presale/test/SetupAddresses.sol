@@ -16,6 +16,8 @@ import {NonfungibleTokenPositionDescriptor} from "@kayen/uniswap-v3-periphery/co
 import {Quoter} from "@kayen/uniswap-v3-periphery/contracts/lens/Quoter.sol";
 import {UniswapV2Factory} from "@kayen/uniswap-v2-core/contracts/UniswapV2Factory.sol";
 import {UniswapV2Router01} from "@kayen/uniswap-v2-periphery/contracts/UniswapV2Router01.sol";
+import {OriginalUniswapV3Factory} from "./mocks/uniswap-v3/UniswapV3Factory.sol";
+import {OriginalNonfungiblePositionManager} from "./mocks/uniswap-v3/NonfungiblePositionManager.sol";
 
 import {PresalePoolManager} from "../contracts/PresalePoolManager.sol";
 import {UniswapV2Distributor} from "../contracts/distributor/UniswapV2Distributor.sol";
@@ -48,11 +50,9 @@ contract SetupAddresses is Test {
     UniswapV3PresaleMaker uniswapV3PresaleMaker;
     UniswapV2Distributor uniswapV2Distributor;
     UniswapV3Distributor uniswapV3Distributor;
-    Quoter externalV3Quoter;
 
-    UniswapV3Factory externalV3Factory;
-    NonfungiblePositionManager externalV3PositionManager;
-    SwapRouter externalV3SwapRouter;
+    OriginalUniswapV3Factory externalV3Factory;
+    OriginalNonfungiblePositionManager externalV3PositionManager;
 
     UniswapV2Factory externalV2Factory;
     UniswapV2Router01 externalV2SwapRouter;
@@ -86,16 +86,14 @@ contract SetupAddresses is Test {
             uniswapV3PresaleMaker = new UniswapV3PresaleMaker(configuration, presaleManager, tokenFactory, poolFactory, positionManager, swapRouter, quoter, address(weth));
 
             NonfungibleTokenPositionDescriptor tokenDescriptor2 = new NonfungibleTokenPositionDescriptor(address(weth), bytes32("WETH"));
-            externalV3Factory = new UniswapV3Factory(presalePoolManager);
-            externalV3PositionManager = new NonfungiblePositionManager(address(externalV3Factory), address(weth), address(tokenDescriptor2));
-            externalV3SwapRouter = new SwapRouter(address(externalV3Factory), address(weth));
-            externalV3Quoter = new Quoter(address(externalV3Factory), address(weth));
+            externalV3Factory = new OriginalUniswapV3Factory();
+            externalV3PositionManager = new OriginalNonfungiblePositionManager(address(externalV3Factory), address(weth), address(tokenDescriptor2));
 
             externalV2Factory = new UniswapV2Factory(deployer);
             externalV2SwapRouter = new UniswapV2Router01(address(externalV2Factory), address(weth));
 
             uniswapV2Distributor = new UniswapV2Distributor(configuration, externalV2Factory, externalV2SwapRouter);
-            uniswapV3Distributor = new UniswapV3Distributor(configuration, externalV3Factory, externalV3PositionManager, externalV3Quoter);
+            uniswapV3Distributor = new UniswapV3Distributor(configuration, externalV3Factory, externalV3PositionManager);
         }
         vm.stopPrank();
 

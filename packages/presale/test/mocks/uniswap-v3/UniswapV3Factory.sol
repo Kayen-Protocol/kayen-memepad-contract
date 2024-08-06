@@ -1,16 +1,14 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity >=0.8.12;
 
-import {IUniswapV3Factory} from "./interfaces/IUniswapV3Factory.sol";
+import {IUniswapV3Factory} from '@kayen/uniswap-v3-core/contracts/interfaces/IUniswapV3Factory.sol';
 
-import {UniswapV3PoolDeployer} from "./UniswapV3PoolDeployer.sol";
-import {NoDelegateCall} from "./NoDelegateCall.sol";
-
-import {IPoolConfiguration} from "./interfaces/IPoolConfiguration.sol";
+import {OriginalUniswapV3PoolDeployer} from './UniswapV3PoolDeployer.sol';
+import {NoDelegateCall} from '@kayen/uniswap-v3-core/contracts/NoDelegateCall.sol';
 
 /// @title Canonical Uniswap V3 factory
 /// @notice Deploys Uniswap V3 pools and manages ownership and control over pool protocol fees
-contract UniswapV3Factory is IUniswapV3Factory, UniswapV3PoolDeployer, NoDelegateCall {
+contract OriginalUniswapV3Factory is IUniswapV3Factory, OriginalUniswapV3PoolDeployer, NoDelegateCall {
     /// @inheritdoc IUniswapV3Factory
     address public override owner;
 
@@ -18,11 +16,8 @@ contract UniswapV3Factory is IUniswapV3Factory, UniswapV3PoolDeployer, NoDelegat
     mapping(uint24 => int24) public override feeAmountTickSpacing;
     /// @inheritdoc IUniswapV3Factory
     mapping(address => mapping(address => mapping(uint24 => address))) public override getPool;
-    
-    IPoolConfiguration public config;
 
-    constructor(IPoolConfiguration _config) {
-        config = _config;
+    constructor() {
         owner = msg.sender;
         emit OwnerChanged(address(0), msg.sender);
 
@@ -34,24 +29,19 @@ contract UniswapV3Factory is IUniswapV3Factory, UniswapV3PoolDeployer, NoDelegat
         emit FeeAmountEnabled(10000, 200);
     }
 
-    modifier onlyWhitelistedMaker() {
-        require(config.isWhitelistedMaker(msg.sender), "Not whitelisted");
-        _;
-    }
-
     /// @inheritdoc IUniswapV3Factory
     function createPool(
         address tokenA,
         address tokenB,
         uint24 fee
-    ) external override noDelegateCall onlyWhitelistedMaker returns (address pool) {
+    ) external override noDelegateCall returns (address pool) {
         require(tokenA != tokenB);
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
         require(token0 != address(0));
         int24 tickSpacing = feeAmountTickSpacing[fee];
         require(tickSpacing != 0);
         require(getPool[token0][token1][fee] == address(0));
-        pool = deploy(address(this), token0, token1, fee, tickSpacing, config);
+        pool = deploy(address(this), token0, token1, fee, tickSpacing);
         getPool[token0][token1][fee] = pool;
         // populate mapping in the reverse direction, deliberate choice to avoid the cost of comparing addresses
         getPool[token1][token0][fee] = pool;

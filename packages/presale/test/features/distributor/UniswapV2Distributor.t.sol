@@ -18,7 +18,7 @@ contract UniswapV2DistributorTest is Setup {
 
     function setUp() public override {
         super.setUp();
-        mockDistributor = new MockDistributor();
+        mockDistributor = new MockDistributor(user1);
         vm.startPrank(deployer);
         {
             configuration.allowDistributor(address(mockDistributor));
@@ -39,11 +39,17 @@ contract UniswapV2DistributorTest is Setup {
                 0,
                 0,
                 0,
+                block.timestamp + 100,
                 ""
             );
         }
         vm.stopPrank();
-        vm.deal(user2, 20 ether);
+        vm.startPrank(deployer);
+        {
+            configuration.removeTransferBlacklist(uniswapV2Distributor.getPoolAddress(presale.info().token, address(weth)));
+        }
+        vm.stopPrank();
+        vm.deal(user2, 30 ether);
     }
 
     function test_distribute() external {
@@ -51,7 +57,7 @@ contract UniswapV2DistributorTest is Setup {
         MockERC20 token1 = new MockERC20("Test2", "TEST2", 1000000000e18);
         token0.transfer(address(uniswapV2Distributor), 1000000000e18);
         token1.transfer(address(uniswapV2Distributor), 1000000000e18);
-        uniswapV2Distributor.distribute(address(token0), address(token1), 1e18, abi.encode(user1));
+        uniswapV2Distributor.distribute(address(token0), address(token1), 0, 1e18);
     }
 
     function test_distribute_by_presale() external {
@@ -59,21 +65,21 @@ contract UniswapV2DistributorTest is Setup {
 
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(weth), poolFee, presale.info().token),
                     address(this),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
         }
         vm.stopPrank();
-        assertTrue(presale.getProgress() == 100);
+        assertTrue(presale.getProgress() >= 1e6);
         vm.startPrank(user1);
         {
-            presale.distribute(uniswapV2Distributor, abi.encode(user1));
+            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
         }
         vm.stopPrank();
     }
@@ -81,32 +87,33 @@ contract UniswapV2DistributorTest is Setup {
     function test_fail_distribute_when_price_differ() external {
         vm.startPrank(user2);
         {
-            uint256 amountOut = swapRouter.exactInput{value: 10e18}(
+            address token = presale.info().token;
+            uint256 amountOut = swapRouter.exactInput{value: 11e18}(
                 ISwapRouter.ExactInputParams(
-                    abi.encodePacked(address(weth), poolFee, presale.info().token),
+                    abi.encodePacked(address(weth), poolFee, token),
                     address(user2),
                     block.timestamp + 10,
-                    10e18,
+                    11e18,
                     0
                 )
             );
-            address pool = externalV2Factory.createPair(address(weth), presale.info().token);
-            IERC20(presale.info().token).approve(address(externalV2SwapRouter), amountOut);
+            IERC20(token).approve(address(externalV2SwapRouter), amountOut);
+
             externalV2SwapRouter.addLiquidityETH{value: 1e18}(
-                presale.info().token,
+                token,
                 amountOut,
                 0,
                 0,
-                address(this),
+                user2,
                 block.timestamp + 10
             );
         }
         vm.stopPrank();
-        assertTrue(presale.getProgress() == 100);
+        assertTrue(presale.getProgress() >= 1e6);
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(uniswapV2Distributor, abi.encode(user1));
+            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
         }
         vm.stopPrank();
     }
