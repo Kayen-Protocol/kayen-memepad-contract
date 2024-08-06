@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0;
 
-// import {UniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/UniswapV3Pool.sol";
+import {UniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/UniswapV3Pool.sol";
 
 /// @title Provides functions for deriving a pool address from the factory, tokens, and the fee
 library PoolAddress {
