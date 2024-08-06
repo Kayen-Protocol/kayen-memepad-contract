@@ -5,5 +5,6 @@ interface IPoolConfiguration {
     function getTradeFee(address token0, address token1) external view returns (uint24);
     function getFeeVault() external view returns (address);
     function beforeSwap(address pool, address recipient) external;
+    function afterSwap(address pool, uint256 deadline) external;
     function isWhitelistedMaker(address target) external view returns (bool);
 }

@@ -16,7 +16,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(mockDistributor, block.timestamp + 100);
+            presale.distribute(address(mockDistributor), block.timestamp + 100);
         }
         vm.stopPrank();
 
@@ -37,7 +37,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
 
         vm.startPrank(user1);
         {
-            presale.distribute(mockDistributor, block.timestamp + 100);
+            presale.distribute(address(mockDistributor), block.timestamp + 100);
         }
         vm.stopPrank();
 

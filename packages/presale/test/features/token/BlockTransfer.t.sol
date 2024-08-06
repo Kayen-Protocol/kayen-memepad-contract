@@ -91,7 +91,7 @@ contract BlockTransferTest is Setup {
                 0
             ));
             
-            presale.distribute(mockDistributor, block.timestamp + 100);
+            presale.distribute(address(mockDistributor), block.timestamp + 100);
             IERC20(presale.info().token).transfer(user2, 10e18);
         }
         vm.stopPrank();

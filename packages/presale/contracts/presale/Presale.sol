@@ -47,9 +47,14 @@ abstract contract Presale is IPresale, ERC721Receiver, Initializable {
 
     function _beforeDistribute(uint256 deadline) internal virtual returns (address, address, uint160);
 
-    function distribute(IDistributor distributor, uint256 deadline) external override onlyAuthorized {
+    function canDistribute(address distributor) external view override returns (bool) {
+        return isBondingCurveEnd() && IDistributor(distributor).canDistribute(_info.token, _info.paymentToken);
+    }
+
+    function distribute(address distributor, uint256 deadline) external override {
+        require(distributor == _config.defaultDistributor() || msg.sender == _info.minter || msg.sender == _config.owner(), "Presale: not authorized");
         require(isBondingCurveEnd() || isExpired(), "Presale: bonding curve not end");
-        require(_config.isDistributorWhitelisted(address(distributor)), "Presale: distributor not whitelisted");
+        require(_config.isDistributorWhitelisted(distributor), "Presale: distributor not whitelisted");
 
         (address token0, address token1, uint160 sqrtPriceX96) = _beforeDistribute(deadline);
         uint256 balance0 = ERC20(token0).balanceOf(address(this));
@@ -60,12 +65,12 @@ abstract contract Presale is IPresale, ERC721Receiver, Initializable {
 
         if (_info.isNewToken) {
             CommonToken(_info.token).removeBlacklist();
-            ERC20(token0).safeTransfer(address(distributor), ERC20(token0).balanceOf(address(this)));
-            ERC20(token1).safeTransfer(address(distributor), ERC20(token1).balanceOf(address(this)));
-            distributor.distribute(token0, token1, sqrtPriceX96, deadline);
+            ERC20(token0).safeTransfer(distributor, ERC20(token0).balanceOf(address(this)));
+            ERC20(token1).safeTransfer(distributor, ERC20(token1).balanceOf(address(this)));
+            IDistributor(distributor).distribute(token0, token1, sqrtPriceX96, deadline);
         } else {
-            ERC20(token0).safeTransfer(address(_info.minter), ERC20(token0).balanceOf(address(this)));
-            ERC20(token1).safeTransfer(address(_info.minter), ERC20(token1).balanceOf(address(this)));
+            ERC20(token0).safeTransfer(_info.minter, ERC20(token0).balanceOf(address(this)));
+            ERC20(token1).safeTransfer(_info.minter, ERC20(token1).balanceOf(address(this)));
         }
 
         _info.isEnd = true;
@@ -101,10 +106,5 @@ abstract contract Presale is IPresale, ERC721Receiver, Initializable {
             uint256 amount2 = (balance1 * rate) / 1e6;
             ERC20(token1).safeTransfer(_config.feeVault(), amount2);
         }
-    }
-
-    modifier onlyAuthorized() {
-        require(msg.sender == _info.minter || msg.sender == _config.owner(), "Presale: not authorized");
-        _;
     }
 }

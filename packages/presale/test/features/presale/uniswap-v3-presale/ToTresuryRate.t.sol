@@ -53,7 +53,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.startPrank(user);
         {
             assertTrue(presale.getProgress() >= 1e6);
-            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV2Distributor), block.timestamp + 100);
 
             uint256 expectedEth = 10e18 / 2 * 99e16 / 1e18;
             uint256 expectedToken = (totalSupply - IERC20(presale.info().token).balanceOf(user2)) / 2  * 99e16 / 1e18;

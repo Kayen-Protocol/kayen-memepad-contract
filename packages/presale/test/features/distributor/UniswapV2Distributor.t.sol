@@ -79,7 +79,7 @@ contract UniswapV2DistributorTest is Setup {
         assertTrue(presale.getProgress() >= 1e6);
         vm.startPrank(user1);
         {
-            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV2Distributor), block.timestamp + 100);
         }
         vm.stopPrank();
     }
@@ -113,7 +113,7 @@ contract UniswapV2DistributorTest is Setup {
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(uniswapV2Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV2Distributor), block.timestamp + 100);
         }
         vm.stopPrank();
     }

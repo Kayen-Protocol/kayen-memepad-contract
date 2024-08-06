@@ -40,6 +40,20 @@ contract UniswapV3Distributor is Distributor {
         return address(factory.getPool(tokenA, tokenB, fee));
     }
 
+    function canDistribute(address token0, address token1) public view override returns (bool) {
+        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
+
+        if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
+            return true;
+        }
+
+        address poolAddress = factory.getPool(tokenA, tokenB, fee);
+        IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
+
+        uint256 liquidity = pool.liquidity();
+        return liquidity == 0;
+    }
+
     function _doDistribute(
         address token0,
         address token1,
@@ -62,8 +76,7 @@ contract UniswapV3Distributor is Distributor {
         address poolAddress = factory.getPool(tokenA, tokenB, fee);
         IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
 
-        uint256 liquidity = pool.liquidity();
-        require(liquidity == 0, "UniswapV3Distributor: pool already has liquidity");
+        require(canDistribute(token0, token1), "UniswapV3Distributor: pool already has liquidity");
         pool.initialize(sqrtPriceX96);
 
         tokenAInstance.forceApprove(address(positionManager), tokenABalance);

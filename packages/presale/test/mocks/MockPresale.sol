@@ -36,9 +36,14 @@ contract MockPresale is IPresale {
         return _isEnd;
     }
 
-    function distribute(IDistributor distributor, uint256 deadline) external override {
+    function canDistribute(address distributor) external view override returns (bool) {
+        return true;
+    }
+
+    function distribute(address distributor, uint256 deadline) external override {
 
     }
+
     function info() external view override returns (PresaleInfo memory) {
         return (
             PresaleInfo(

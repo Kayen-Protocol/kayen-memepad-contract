@@ -85,13 +85,13 @@ contract UniswapV2DistributorTest is Setup {
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV3Distributor), block.timestamp + 100);
         }
         vm.stopPrank();
 
         vm.startPrank(user1);
         {
-            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV3Distributor), block.timestamp + 100);
         }
         vm.stopPrank();
     }
@@ -134,7 +134,7 @@ contract UniswapV2DistributorTest is Setup {
         vm.startPrank(user2);
         {
             vm.expectRevert();
-            presale.distribute(uniswapV3Distributor, block.timestamp + 100);
+            presale.distribute(address(uniswapV3Distributor), block.timestamp + 100);
         }
         vm.stopPrank();
     }

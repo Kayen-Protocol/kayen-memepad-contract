@@ -12,6 +12,8 @@ contract Configuration is Ownable, IBlacklist {
     mapping(address => bool) public presaleMakers;
     mapping(address => bool) public isPoolPaused;
     mapping(address => bool) public transferBlacklist;
+
+    address public defaultDistributor;
     
     uint256 public maxPresaleDuration = 365 days;
     bool public isAllPoolPaused;
@@ -188,6 +190,11 @@ contract Configuration is Ownable, IBlacklist {
 
     function putMaxPresaleDuration(uint256 duration) external onlyOwner {
         maxPresaleDuration = duration;
+    }
+
+    function putDefaultDistributor(address distributor) external onlyOwner {
+        require(distributorWhitelist[distributor], "Configuration: distributor not whitelisted");
+        defaultDistributor = distributor;
     }
 
 }

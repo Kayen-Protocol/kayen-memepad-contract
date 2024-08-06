@@ -828,6 +828,9 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
         collectProtocol();
 
         slot0.unlocked = true;
+
+        SwapCallbackData memory decodedData = abi.decode(data, (SwapCallbackData));
+        poolConfiguration.afterSwap(address(this), decodedData.deadline);
     }
 
     /// @inheritdoc IUniswapV3PoolActions
@@ -910,5 +913,11 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
         }
 
         emit CollectProtocol(msg.sender, poolConfiguration.getFeeVault(), amount0, amount1);
+    }
+
+    struct SwapCallbackData {
+        bytes path;
+        address payer;
+        uint256 deadline;
     }
 }
