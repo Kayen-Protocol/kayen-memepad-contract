@@ -19,12 +19,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const contract = new ethers.Contract(configuration.address, configuration.abi, signer);
 
   const prevDefaultDistributor = await contract.defaultDistributor();
+  console.log(prevDefaultDistributor);
   if (prevDefaultDistributor !== distributor.address) {
     const tx1 = await contract.allowDistributor(distributor.address);
     await tx1.wait();
     const tx2 = await contract.putDefaultDistributor(distributor.address);
     await tx2.wait();
   }
+
   console.log("UniswapV2Distributor", distributor.address);
 };
 

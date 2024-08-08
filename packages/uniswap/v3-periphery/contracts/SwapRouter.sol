@@ -51,6 +51,7 @@ contract SwapRouter is
     struct SwapCallbackData {
         bytes path;
         address payer;
+        uint256 deadline;
     }
 
     /// @inheritdoc IUniswapV3SwapCallback
@@ -121,7 +122,7 @@ contract SwapRouter is
             params.amountIn,
             params.recipient,
             params.sqrtPriceLimitX96,
-            SwapCallbackData({path: abi.encodePacked(params.tokenIn, params.fee, params.tokenOut), payer: msg.sender})
+            SwapCallbackData({path: abi.encodePacked(params.tokenIn, params.fee, params.tokenOut), payer: msg.sender, deadline: params.deadline})
         );
         require(amountOut >= params.amountOutMinimum, 'Too little received');
     }
@@ -146,7 +147,8 @@ contract SwapRouter is
                 0,
                 SwapCallbackData({
                     path: params.path.getFirstPool(), // only the first pool in the path is necessary
-                    payer: payer
+                    payer: payer,
+                    deadline: params.deadline
                 })
             );
 
@@ -209,7 +211,7 @@ contract SwapRouter is
             params.amountOut,
             params.recipient,
             params.sqrtPriceLimitX96,
-            SwapCallbackData({path: abi.encodePacked(params.tokenOut, params.fee, params.tokenIn), payer: msg.sender})
+            SwapCallbackData({path: abi.encodePacked(params.tokenOut, params.fee, params.tokenIn), payer: msg.sender, deadline: params.deadline})
         );
 
         require(amountIn <= params.amountInMaximum, 'Too much requested');
@@ -231,7 +233,7 @@ contract SwapRouter is
             params.amountOut,
             params.recipient,
             0,
-            SwapCallbackData({path: params.path, payer: msg.sender})
+            SwapCallbackData({path: params.path, payer: msg.sender, deadline: params.deadline})
         );
 
         amountIn = amountInCached;

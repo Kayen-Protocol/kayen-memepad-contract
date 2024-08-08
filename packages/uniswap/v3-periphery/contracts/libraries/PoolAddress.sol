@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0;
 
-import {UniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/UniswapV3Pool.sol";
+// import {UniswapV3Pool} from "@kayen/uniswap-v3-core/contracts/UniswapV3Pool.sol";
 
 /// @title Provides functions for deriving a pool address from the factory, tokens, and the fee
 library PoolAddress {
-    // bytes32 internal constant POOL_INIT_CODE_HASH = 0xc253ff91edc1da07ea9b895658bc7aeeebb58a9add3f9ff4aa659c08ae8d2816;
-    bytes32 public constant POOL_INIT_CODE_HASH = keccak256(abi.encodePacked(type(UniswapV3Pool).creationCode));
+    bytes32 internal constant POOL_INIT_CODE_HASH = 0xc253ff91edc1da07ea9b895658bc7aeeebb58a9add3f9ff4aa659c08ae8d2816;
+    // bytes32 public constant POOL_INIT_CODE_HASH = keccak256(abi.encodePacked(type(UniswapV3Pool).creationCode));
 
     /// @notice The identifying key of the pool
     struct PoolKey {
@@ -20,11 +20,7 @@ library PoolAddress {
     /// @param tokenB The second token of a pool, unsorted
     /// @param fee The fee level of the pool
     /// @return Poolkey The pool details with ordered token0 and token1 assignments
-    function getPoolKey(
-        address tokenA,
-        address tokenB,
-        uint24 fee
-    ) internal pure returns (PoolKey memory) {
+    function getPoolKey(address tokenA, address tokenB, uint24 fee) internal pure returns (PoolKey memory) {
         if (tokenA > tokenB) (tokenA, tokenB) = (tokenB, tokenA);
         return PoolKey({token0: tokenA, token1: tokenB, fee: fee});
     }
@@ -40,7 +36,7 @@ library PoolAddress {
                 uint256(
                     keccak256(
                         abi.encodePacked(
-                            hex'ff',
+                            hex"ff",
                             factory,
                             keccak256(abi.encode(key.token0, key.token1, key.fee)),
                             POOL_INIT_CODE_HASH
