@@ -24,13 +24,8 @@ contract UniswapV2Distributor is Distributor {
         router = _router;
     }
 
-    function getPoolAddress(address token0, address token1) public returns (address) {
-        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
-        address pairAddress = factory.getPair(tokenA, tokenB);
-        if (pairAddress != address(0)) {
-            return pairAddress;
-        }
-        return factory.createPair(token0, token1);
+    function getPoolAddress(address token0, address token1) external returns (address) {
+        return UniswapV2Library.pairFor(address(factory), token0, token1);
     }
 
     function canDistribute(address token0, address token1) public view override returns (bool) {
@@ -55,12 +50,10 @@ contract UniswapV2Distributor is Distributor {
         uint256 tokenABalance = tokenAInstance.balanceOf(address(this));
         uint256 tokenBBalance = tokenBInstance.balanceOf(address(this));
 
-        require(tokenABalance > 0 && tokenBBalance > 0, "UniswapV2Distributor: insufficient balance");
-        require(canDistribute(token0, token1), "UniswapV2Distributor: pair already has liquidity");
+        // require(canDistribute(token0, token1), "UniswapV2Distributor: pair already has liquidity");
 
         tokenAInstance.forceApprove(address(router), tokenABalance);
         tokenBInstance.forceApprove(address(router), tokenBBalance);
-        getPoolAddress(token0, token1);
 
         router.addLiquidity(tokenA, tokenB, tokenABalance, tokenBBalance, 0, 0, address(this), deadline);
     }

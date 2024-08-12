@@ -13,7 +13,7 @@ import {Configuration} from "../Configuration.sol";
 
 abstract contract Presale is IPresale, ERC721Receiver, Initializable {
     using SafeERC20 for ERC20;
-    
+
     PresaleInfo internal _info;
     Configuration internal _config;
 
@@ -52,7 +52,10 @@ abstract contract Presale is IPresale, ERC721Receiver, Initializable {
     }
 
     function distribute(address distributor, uint256 deadline) external override {
-        require(distributor == _config.defaultDistributor() || msg.sender == _info.minter || msg.sender == _config.owner(), "Presale: not authorized");
+        require(
+            distributor == _config.defaultDistributor() || msg.sender == _info.minter || msg.sender == _config.owner(),
+            "Presale: not authorized"
+        );
         require(isBondingCurveEnd() || isExpired(), "Presale: bonding curve not end");
         require(_config.isDistributorWhitelisted(distributor), "Presale: distributor not whitelisted");
 

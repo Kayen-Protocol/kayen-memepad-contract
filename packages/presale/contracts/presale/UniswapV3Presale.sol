@@ -43,11 +43,7 @@ contract UniswapV3Presale is Presale {
     function getRaisedAmount() public view override returns (uint256) {
         PositionInfo memory positionInfo = getPositionInfo();
         (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(_info.pool).slot0();
-        (uint256 reserve0, uint256 reserve1) = PositionValue.total(
-            positionManager,
-            tokenId,
-            sqrtPriceX96
-        );
+        (uint256 reserve0, uint256 reserve1) = PositionValue.total(positionManager, tokenId, sqrtPriceX96);
         if (positionInfo.token0 != _info.token) {
             return reserve0;
         } else {
@@ -62,17 +58,10 @@ contract UniswapV3Presale is Presale {
         return (positionInfo.token0, positionInfo.token1, sqrtPriceX96);
     }
 
-
     function burnPosition(uint256 deadline) internal {
         PositionInfo memory position = getPositionInfo();
         positionManager.decreaseLiquidity(
-            INonfungiblePositionManager.DecreaseLiquidityParams(
-                tokenId,
-                position.liquidity,
-                0,
-                0,
-                deadline
-            )
+            INonfungiblePositionManager.DecreaseLiquidityParams(tokenId, position.liquidity, 0, 0, deadline)
         );
         positionManager.collect(
             INonfungiblePositionManager.CollectParams({

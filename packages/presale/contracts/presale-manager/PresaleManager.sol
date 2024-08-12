@@ -20,7 +20,7 @@ contract PresaleManager is Ownable {
         require(config.presaleMakers(msg.sender), "PresaleManager: FORBIDDEN");
         (address tokenAddress, string memory name, string memory symbol, uint256 totalSupply) = presale.tokenInfo();
         require(!isRegistered[tokenAddress], "PresaleManager: ALREADY_REGISTERED");
-        IPresale.PresaleInfo memory presaleInfo =  presale.info();
+        IPresale.PresaleInfo memory presaleInfo = presale.info();
         presales[tokenAddress] = address(presale);
         isRegistered[tokenAddress] = true;
         presalesByPool[presaleInfo.pool] = address(presale);
@@ -44,7 +44,7 @@ contract PresaleManager is Ownable {
     }
 
     function getPresale(address target) public view returns (IPresale) {
-        if(address(presales[target]) == address(0)) {
+        if (address(presales[target]) == address(0)) {
             return IPresale(presalesByPool[target]);
         }
         return IPresale(presales[target]);
@@ -62,6 +62,9 @@ contract PresaleManager is Ownable {
         return getPresale(target).isBondingCurveEnd();
     }
 
+    function isExpired(address target) public view returns (bool) {
+        return getPresale(target).isExpired();
+    }
 
     event PresaleCreated(
         string name,
