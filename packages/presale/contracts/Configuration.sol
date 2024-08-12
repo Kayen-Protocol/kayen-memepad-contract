@@ -14,7 +14,7 @@ contract Configuration is Ownable, IBlacklist {
     mapping(address => bool) public transferBlacklist;
 
     address public defaultDistributor;
-    
+
     uint256 public maxPresaleDuration = 365 days;
     bool public isAllPoolPaused;
 
@@ -58,8 +58,8 @@ contract Configuration is Ownable, IBlacklist {
 
     function disallowDistributor(address distributor) external onlyOwner {
         distributorWhitelist[distributor] = false;
-        for(uint256 i = 0; i < distributors.length; i++) {
-            if(address(distributors[i]) == distributor) {
+        for (uint256 i = 0; i < distributors.length; i++) {
+            if (address(distributors[i]) == distributor) {
                 distributors[i] = distributors[distributors.length - 1];
                 distributors.pop();
                 break;
@@ -73,20 +73,20 @@ contract Configuration is Ownable, IBlacklist {
 
     function putDefaultDistributionFeeRate(uint24 feeRate) external onlyOwner {
         // max 30%
-        require(feeRate <= 1e6 / 100 * 30, "Configuration: default distribution fee rate must be less than 30%");
+        require(feeRate <= (1e6 / 100) * 30, "Configuration: default distribution fee rate must be less than 30%");
         defaultDistributionFeeRate = feeRate;
     }
 
     function putDistributionFeeRateForToken(address token, uint24 feeRate) external onlyOwner {
         // max 30%
-        require(feeRate <= 1e6 / 100 * 30, "Configuration: default distribution fee rate must be less than 30%");
+        require(feeRate <= (1e6 / 100) * 30, "Configuration: default distribution fee rate must be less than 30%");
         distributionFeeRate[token] = feeRate;
     }
 
     function getDistributionFeeRate(address token0, address token1) external view returns (uint24) {
         uint24 fee0 = distributionFeeRate[token0];
         uint24 fee1 = distributionFeeRate[token1];
-        if(fee0 == 0 && fee1 == 0) {
+        if (fee0 == 0 && fee1 == 0) {
             return defaultDistributionFeeRate;
         }
         return fee0 > fee1 ? fee0 : fee1;
@@ -130,7 +130,7 @@ contract Configuration is Ownable, IBlacklist {
         require(fee <= 1000e18, "Configuration: minting fee must be less than 1000");
         mintingFee = fee;
     }
-    
+
     function putDefaultTradeFee(uint24 _tradeFee) external onlyOwner {
         assertTradeFee(_tradeFee);
         defaultTradeFee = _tradeFee;
@@ -144,7 +144,7 @@ contract Configuration is Ownable, IBlacklist {
     function getTradeFee(address token0, address token1) external view returns (uint24) {
         uint24 fee0 = tradeFee[token0];
         uint24 fee1 = tradeFee[token1];
-        if(fee0 == 0 && fee1 == 0) {
+        if (fee0 == 0 && fee1 == 0) {
             return defaultTradeFee;
         }
         return fee0 > fee1 ? fee0 : fee1;
@@ -175,7 +175,7 @@ contract Configuration is Ownable, IBlacklist {
 
     function putComputedTransferBlacklist(address token1, address token2) external {
         require(presaleMakers[msg.sender], "Configuration: FORBIDDEN");
-        for(uint256 i = 0; i < distributors.length; i++) {
+        for (uint256 i = 0; i < distributors.length; i++) {
             transferBlacklist[distributors[i].getPoolAddress(token1, token2)] = true;
         }
     }
@@ -196,5 +196,4 @@ contract Configuration is Ownable, IBlacklist {
         require(distributorWhitelist[distributor], "Configuration: distributor not whitelisted");
         defaultDistributor = distributor;
     }
-
 }

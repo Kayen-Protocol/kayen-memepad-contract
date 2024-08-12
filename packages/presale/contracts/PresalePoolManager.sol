@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.7;
 
-import { Configuration } from "./Configuration.sol";
-import { PresaleManager } from "./presale-manager/PresaleManager.sol";
-import { IPoolConfiguration } from "@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol";
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import {Configuration} from "./Configuration.sol";
+import {PresaleManager} from "./presale-manager/PresaleManager.sol";
+import {IPoolConfiguration} from "@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IDistributor} from "./distributor/IDistributor.sol";
 
 contract PresalePoolManager is IPoolConfiguration, Ownable {
@@ -26,25 +26,25 @@ contract PresalePoolManager is IPoolConfiguration, Ownable {
     }
 
     function beforeSwap(address pool, address recipient) external {
-        if(recipient != quoter) {
+        if (recipient != quoter) {
             require(!checkIsPaused(pool), "PresalePoolManager: Pool is paused");
             require(!manager.isBondingCurveEnd(pool), "PresalePoolManager: Bonding curve end");
             require(!checkIsPending(pool), "PresalePoolManager: Pool is pending");
+            require(!manager.isExpired(pool), "PresalePoolManager: Expired");
         }
     }
 
     function afterSwap(address pool, uint256 deadline) external {
-        if(!manager.isBondingCurveEnd(pool)) {
+        if (!manager.isBondingCurveEnd(pool)) {
             return;
         }
         address distributor = config.defaultDistributor();
-        if(distributor == address(0)) {
+        if (distributor == address(0)) {
             return;
         }
-        if(manager.getPresale(pool).canDistribute(distributor)) {
+        if (manager.getPresale(pool).canDistribute(distributor)) {
             manager.getPresale(pool).distribute(distributor, deadline);
         }
-
     }
 
     function isWhitelistedMaker(address maker) external view returns (bool) {
@@ -62,6 +62,4 @@ contract PresalePoolManager is IPoolConfiguration, Ownable {
     function checkIsPaused(address pool) private view returns (bool) {
         return config.isPaused(pool);
     }
-
-
 }

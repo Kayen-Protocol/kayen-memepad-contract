@@ -153,6 +153,10 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         require(toTreasuryRate <= config.getMaxTreasuryRate(), "UniswapV3PresaleMaker: treasury rate too high");
         require(config.paymentTokenWhitelist(paymentToken), "UniswapV3PresaleMaker: payment token not whitelisted");
         require(amountToRaise > 0, "UniswapV3PresaleMaker: presale amount must be greater than 0");
+        require(
+            startTimestamp == 0 || startTimestamp >= block.timestamp,
+            "UniswapV3PresaleMaker: start timestamp cannot be in the past"
+        );
 
         address _paymentToken = paymentToken;
         if (eth == paymentToken) {
@@ -251,7 +255,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
 
     function sendMintingFee() internal {
         if (config.mintingFee() > 0) {
-            payable(config.feeVault()).transfer(config.mintingFee());
+            payable(config.feeVault()).call{value: config.mintingFee()}("");
         }
     }
 
@@ -282,7 +286,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         }
         uint256 value = (paymentToken == eth) ? amount : 0;
         if (paymentToken != eth) {
-            IERC20(paymentToken).safeTransferFrom(msg.sender, address(this), amount);
+            // IERC20(paymentToken).safeTransferFrom(msg.sender, address(this), amount);
             IERC20(paymentToken).forceApprove(address(swapRouter), amount);
         }
 

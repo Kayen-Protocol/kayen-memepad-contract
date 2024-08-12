@@ -54,13 +54,7 @@ contract UniswapV3Distributor is Distributor {
         return liquidity == 0;
     }
 
-    function _doDistribute(
-        address token0,
-        address token1,
-        uint160 sqrtPriceX96,
-        uint256 deadline
-    ) internal override {
-
+    function _doDistribute(address token0, address token1, uint160 sqrtPriceX96, uint256 deadline) internal override {
         (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
 
         IERC20 tokenAInstance = IERC20(tokenA);
@@ -69,20 +63,21 @@ contract UniswapV3Distributor is Distributor {
         uint256 tokenABalance = tokenAInstance.balanceOf(address(this));
         uint256 tokenBBalance = tokenBInstance.balanceOf(address(this));
 
-        if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
-            factory.createPool(tokenA, tokenB, fee);
-        }
+        // if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
+        //     factory.createPool(tokenA, tokenB, fee);
+        // }
 
-        address poolAddress = factory.getPool(tokenA, tokenB, fee);
-        IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
+        // address poolAddress = factory.getPool(tokenA, tokenB, fee);
+        // IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
 
-        require(canDistribute(token0, token1), "UniswapV3Distributor: pool already has liquidity");
-        pool.initialize(sqrtPriceX96);
+        // require(canDistribute(token0, token1), "UniswapV3Distributor: pool already has liquidity");
+        // pool.initialize(sqrtPriceX96);
+        positionManager.createAndInitializePoolIfNecessary(tokenA, tokenB, fee, sqrtPriceX96);
 
         tokenAInstance.forceApprove(address(positionManager), tokenABalance);
         tokenBInstance.forceApprove(address(positionManager), tokenBBalance);
 
-        int24 tickSpacing = pool.tickSpacing();
+        int24 tickSpacing = 1;
 
         positionManager.mint(
             INonfungiblePositionManager.MintParams({
