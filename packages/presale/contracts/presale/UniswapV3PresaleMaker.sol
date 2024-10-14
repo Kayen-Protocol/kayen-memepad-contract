@@ -60,6 +60,32 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         quoter = _quoter;
     }
 
+    struct NewTokenPresaleParams {
+        address paymentToken;
+        address saleToken;
+        string name;
+        string symbol;
+        uint256 totalSupply;
+        uint160 sqrtPriceX96;
+        int24 tickLower;
+        int24 tickUpper;
+        uint256 amountToSale;
+        uint256 amountToRaise;
+        uint256 amountForBuyInstantly;
+        uint24 toTreasuryRate;
+        uint256 startTimestamp;
+        uint256 deadline;
+        string data;
+    }
+
+    function startWithNewTokenWithParams (NewTokenPresaleParams memory params) public payable returns (IPresale) {
+        return startWithNewToken(params.paymentToken, params.name, params.symbol, params.totalSupply, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    }
+
+    function startWithParams (NewTokenPresaleParams memory params) public payable returns (IPresale) {
+        return start(params.paymentToken, params.saleToken, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    }
+
     function startWithNewToken(
         address paymentToken,
         string memory name,
@@ -75,7 +101,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 startTimestamp,
         uint256 deadline,
         string memory data
-    ) external payable returns (IPresale) {
+    ) public payable returns (IPresale) {
         address token = tokenFactory.create(name, symbol, totalSupply);
         CommonToken tokenInstance = CommonToken(token);
         tokenInstance.putBlacklist(config);
@@ -115,7 +141,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 startTimestamp,
         uint256 deadline,
         string memory data
-    ) external payable returns (IPresale) {
+    ) public payable returns (IPresale) {
         IERC20(saleToken).safeTransferFrom(msg.sender, address(this), amountToSale);
         return
             _create(
