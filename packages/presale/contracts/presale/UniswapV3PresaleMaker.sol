@@ -62,10 +62,24 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
 
     struct NewTokenPresaleParams {
         address paymentToken;
-        address saleToken;
         string name;
         string symbol;
         uint256 totalSupply;
+        uint160 sqrtPriceX96;
+        int24 tickLower;
+        int24 tickUpper;
+        uint256 amountToSale;
+        uint256 amountToRaise;
+        uint256 amountForBuyInstantly;
+        uint24 toTreasuryRate;
+        uint256 startTimestamp;
+        uint256 deadline;
+        string data;
+    }
+    
+    struct TokenPresaleParams {
+        address paymentToken;
+        address saleToken;
         uint160 sqrtPriceX96;
         int24 tickLower;
         int24 tickUpper;
@@ -82,7 +96,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         return startWithNewToken(params.paymentToken, params.name, params.symbol, params.totalSupply, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
     }
 
-    function startWithParams (NewTokenPresaleParams memory params) public payable returns (IPresale) {
+    function startWithParams (TokenPresaleParams memory params) public payable returns (IPresale) {
         return start(params.paymentToken, params.saleToken, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
     }
 
