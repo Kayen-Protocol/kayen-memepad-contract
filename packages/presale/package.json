@@ -5,11 +5,11 @@
   "scripts": {
     "compile": "forge compile",
     "test": "forge test",
-    "deploy:part1": "yarn hardhat deploy --tags part1 --network chiliz_spicy",
-    "deploy:part2": "yarn hardhat deploy --tags part2 --network chiliz_spicy",
-    "deploy:distributor": "yarn hardhat deploy --tags distributor --network chiliz_spicy",
-    "deploy:test": "yarn hardhat deploy --tags test --network chiliz_spicy",
-    "deploy:test:swap": "yarn hardhat deploy --tags test:swap --network chiliz_spicy",
+    "deploy:part1": "yarn hardhat deploy --tags part1",
+    "deploy:part2": "yarn hardhat deploy --tags part2",
+    "deploy:v2Distributor": "yarn hardhat deploy --tags v2Distributor ",
+    "deploy:test": "yarn hardhat deploy --tags test",
+    "deploy:test:swap": "yarn hardhat deploy --tags test:swap",
     "deploy:forge": "forge script --chain 88882 scripts/deploy.sol:Deploy --rpc-url $CHILIZ_RPC_URL --broadcast"
   },
   "devDependencies": {
