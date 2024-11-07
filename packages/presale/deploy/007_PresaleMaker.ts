@@ -1,12 +1,16 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { WCHZ } from "./constants";
+import { getNetworkAddresses } from "./constants";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
+  const { chainId } = await ethers.provider.getNetwork();
+
+  const { wETH } = getNetworkAddresses(chainId);
+
 
   const configuration = await deployments.get("Configuration");
   const presaleManager = await deployments.get("PresaleManager");
@@ -26,7 +30,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       positionManager.address,
       swapRouter.address,
       quoter.address,
-      WCHZ,
+      wETH,
     ],
   });
 
