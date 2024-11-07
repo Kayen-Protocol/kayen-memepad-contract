@@ -50,6 +50,14 @@ export const config: HardhatUserConfig = {
       tags: ["mainnet"],
       saveDeployments: true,
     },
+    sepolia: {
+      url: "https://eth-sepolia.g.alchemy.com/v2/cwlARYWEEACYbZYUWyBeQ5TrKhwPvbXk",
+      chainId: 11155111,
+      accounts: require("./secrets.json").privateKey,
+      tags: ["eth_testnet"],
+      saveDeployments: true,
+    },
+
   },
   namedAccounts: {
     deployer: { default: 0 },
