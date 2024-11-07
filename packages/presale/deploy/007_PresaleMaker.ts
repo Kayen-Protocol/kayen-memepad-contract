@@ -1,7 +1,6 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-
-const WCHZ = "0x678c34581db0a7808d0aC669d7025f1408C9a3C6";
+import { WCHZ } from "./constants";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
