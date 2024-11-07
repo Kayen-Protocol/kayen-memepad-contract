@@ -41,51 +41,31 @@ contract UniswapV3Distributor is Distributor {
     }
 
     function canDistribute(address token0, address token1) public view override returns (bool) {
-        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
-
-        if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
-            return true;
-        }
-
-        address poolAddress = factory.getPool(tokenA, tokenB, fee);
-        IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
-
-        uint256 liquidity = pool.liquidity();
-        return liquidity == 0;
+        return true;
     }
 
     function _doDistribute(address token0, address token1, uint160 sqrtPriceX96, uint256 deadline) internal override {
         (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
 
-        IERC20 tokenAInstance = IERC20(tokenA);
-        IERC20 tokenBInstance = IERC20(tokenB);
+        uint256 tokenABalance = IERC20(tokenA).balanceOf(address(this));
+        uint256 tokenBBalance = IERC20(tokenB).balanceOf(address(this));
 
-        uint256 tokenABalance = tokenAInstance.balanceOf(address(this));
-        uint256 tokenBBalance = tokenBInstance.balanceOf(address(this));
-
-        // if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
-        //     factory.createPool(tokenA, tokenB, fee);
-        // }
-
-        // address poolAddress = factory.getPool(tokenA, tokenB, fee);
-        // IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
-
-        // require(canDistribute(token0, token1), "UniswapV3Distributor: pool already has liquidity");
-        // pool.initialize(sqrtPriceX96);
         positionManager.createAndInitializePoolIfNecessary(tokenA, tokenB, fee, sqrtPriceX96);
 
-        tokenAInstance.forceApprove(address(positionManager), tokenABalance);
-        tokenBInstance.forceApprove(address(positionManager), tokenBBalance);
+        IERC20(tokenA).forceApprove(address(positionManager), tokenABalance);
+        IERC20(tokenB).forceApprove(address(positionManager), tokenBBalance);
 
         int24 tickSpacing = 1;
+        int24 tickLower = TickMath.MIN_TICK - (TickMath.MIN_TICK % tickSpacing);
+        int24 tickUpper = TickMath.MAX_TICK - (TickMath.MAX_TICK % tickSpacing);
 
         positionManager.mint(
             INonfungiblePositionManager.MintParams({
                 token0: tokenA,
                 token1: tokenB,
                 fee: fee,
-                tickLower: TickMath.MIN_TICK - (TickMath.MIN_TICK % tickSpacing),
-                tickUpper: TickMath.MAX_TICK - (TickMath.MAX_TICK % tickSpacing),
+                tickLower: tickLower,
+                tickUpper: tickUpper,
                 amount0Desired: tokenABalance,
                 amount1Desired: tokenBBalance,
                 amount0Min: 0,
