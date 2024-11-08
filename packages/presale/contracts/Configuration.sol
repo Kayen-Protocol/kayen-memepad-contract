@@ -75,12 +75,16 @@ contract Configuration is Ownable, IBlacklist {
         // max 30%
         require(feeRate <= (1e6 / 100) * 30, "Configuration: default distribution fee rate must be less than 30%");
         defaultDistributionFeeRate = feeRate;
+
+        emit DefaultDistributionFeeRateUpdated(feeRate);
     }
 
     function putDistributionFeeRateForToken(address token, uint24 feeRate) external onlyOwner {
         // max 30%
         require(feeRate <= (1e6 / 100) * 30, "Configuration: default distribution fee rate must be less than 30%");
         distributionFeeRate[token] = feeRate;
+
+        emit DistributionFeeRateForTokenUpdated(token, feeRate);
     }
 
     function getDistributionFeeRate(address token0, address token1) external view returns (uint24) {
@@ -95,6 +99,8 @@ contract Configuration is Ownable, IBlacklist {
     function putFeeVault(address vault) external onlyOwner {
         require(vault != address(0), "Configuration: fee vault cannot be zero address");
         feeVault = vault;
+
+        emit FeeVaultUpdated(vault);
     }
 
     function getFeeVault() external view returns (address) {
@@ -129,16 +135,22 @@ contract Configuration is Ownable, IBlacklist {
         // max 30%
         require(fee <= 1000e18, "Configuration: minting fee must be less than 1000");
         mintingFee = fee;
+
+        emit MintingFeeUpdated(fee);
     }
 
     function putDefaultTradeFee(uint24 _tradeFee) external onlyOwner {
         assertTradeFee(_tradeFee);
         defaultTradeFee = _tradeFee;
+
+        emit DefaultTradeFeeUpdated(_tradeFee);
     }
 
     function putTradeFeeForToken(address token, uint24 _tradeFee) external onlyOwner {
         assertTradeFee(_tradeFee);
         tradeFee[token] = _tradeFee;
+
+        emit TradeFeeForTokenUpdated(token, _tradeFee);
     }
 
     function getTradeFee(address token0, address token1) external view returns (uint24) {
@@ -153,6 +165,8 @@ contract Configuration is Ownable, IBlacklist {
     function putMaxTreasuryRate(uint24 rate) external onlyOwner {
         require(rate <= 1e6, "Configuration: max treasury rate must be less than 1e6");
         maxTreasuryRate = rate;
+
+        emit MaxTreasuryRateUpdated(rate);
     }
 
     function getMaxTreasuryRate() external view returns (uint24) {
@@ -190,10 +204,24 @@ contract Configuration is Ownable, IBlacklist {
 
     function putMaxPresaleDuration(uint256 duration) external onlyOwner {
         maxPresaleDuration = duration;
+
+        emit MaxPresaleDurationUpdated(duration);
     }
 
     function putDefaultDistributor(address distributor) external onlyOwner {
         require(distributorWhitelist[distributor], "Configuration: distributor not whitelisted");
         defaultDistributor = distributor;
+
+        emit DefaultDistributorUpdated(distributor);
     }
+
+    event DefaultTradeFeeUpdated(uint24 fee);
+    event TradeFeeForTokenUpdated(address token, uint24 fee);
+    event MintingFeeUpdated(uint256 fee);
+    event DefaultDistributionFeeRateUpdated(uint24 fee);
+    event DistributionFeeRateForTokenUpdated(address token, uint24 fee);
+    event MaxTreasuryRateUpdated(uint24 rate);
+    event MaxPresaleDurationUpdated(uint256 duration);
+    event DefaultDistributorUpdated(address distributor);
+    event FeeVaultUpdated(address vault);
 }
