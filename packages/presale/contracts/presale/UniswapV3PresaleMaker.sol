@@ -245,21 +245,6 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             })
         );
 
-        (
-            uint96 _nonce,
-            address _operator,
-            address _token0,
-            address _token1,
-            uint24 _fee,
-            int24 _tickLower,
-            int24 _tickUpper,
-            uint128 _liquidity,
-            uint256 _feeGrowthInside0LastX128,
-            uint256 _feeGrowthInside1LastX128,
-            uint128 _tokensOwed0,
-            uint128 _tokensOwed1
-        ) = positionManager.positions(tokenId);
-
         IPresale.PresaleInfo memory info = IPresale.PresaleInfo({
             minter: msg.sender,
             token: saleToken,
