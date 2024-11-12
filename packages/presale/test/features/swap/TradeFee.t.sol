@@ -2,7 +2,6 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
-import "forge-std/console.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 import {MockDistributor} from "../../mocks/MockDistributor.sol";
@@ -180,11 +179,6 @@ contract UniswapV3PresaleTest is Setup {
                 feeExcludedAmount1 = amount1;
             }
         }
-        console.log(Strings.toString(originalAmount0));
-        console.log(Strings.toString(originalAmount1));
-        console.log(Strings.toString(feeExcludedAmount0));
-        console.log(Strings.toString(feeExcludedAmount1));
-        console.log(bera.balanceOf(configuration.feeVault()));
         assertTrue(feeExcludedAmount1 + int256(bera.balanceOf(configuration.feeVault())) == originalAmount1);
     }
 }
