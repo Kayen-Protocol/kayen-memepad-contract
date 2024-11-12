@@ -79,13 +79,11 @@ interface IUniswapV3PoolEvents {
         int24 tick
     );
 
-    event SwapWithFee(
+    event SwapFeeExcluded(
         address indexed sender,
         address indexed recipient,
         int256 amount0,
         int256 amount1,
-        uint256 fee0,
-        uint256 fee1,
         uint160 sqrtPriceX96,
         uint128 liquidity,
         int24 tick

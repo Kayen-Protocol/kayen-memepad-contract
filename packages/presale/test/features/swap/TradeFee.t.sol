@@ -162,8 +162,6 @@ contract UniswapV3PresaleTest is Setup {
         int256 originalAmount1;
         int256 feeExcludedAmount0;
         int256 feeExcludedAmount1;
-        uint256 fee0;
-        uint256 fee1;
         for (; idx < entries.length; idx++) {
             if (entries[idx].topics[0] == IUniswapV3PoolEvents.Swap.selector) {
                 (int256 amount0, int256 amount1, uint160 c, uint128 d, int24 e) = abi.decode(
@@ -173,21 +171,20 @@ contract UniswapV3PresaleTest is Setup {
                 originalAmount0 = amount0;
                 originalAmount1 = amount1;
             }
-            if (entries[idx].topics[0] == IUniswapV3PoolEvents.SwapWithFee.selector) {
-                (int256 amount0, int256 amount1, uint256 _fee0, uint256 _fee1, uint160 c, uint128 d, int24 e) = abi
-                    .decode(entries[idx].data, (int256, int256, uint256, uint256, uint160, uint128, int24));
+            if (entries[idx].topics[0] == IUniswapV3PoolEvents.SwapFeeExcluded.selector) {
+                (int256 amount0, int256 amount1, uint160 c, uint128 d, int24 e) = abi.decode(
+                    entries[idx].data,
+                    (int256, int256, uint160, uint128, int24)
+                );
                 feeExcludedAmount0 = amount0;
                 feeExcludedAmount1 = amount1;
-                fee0 = _fee0;
-                fee1 = _fee1;
             }
         }
         console.log(Strings.toString(originalAmount0));
         console.log(Strings.toString(originalAmount1));
         console.log(Strings.toString(feeExcludedAmount0));
         console.log(Strings.toString(feeExcludedAmount1));
-        console.log(Strings.toString(fee0));
-        console.log(Strings.toString(fee1));
         console.log(bera.balanceOf(configuration.feeVault()));
+        assertTrue(feeExcludedAmount1 + int256(bera.balanceOf(configuration.feeVault())) == originalAmount1);
     }
 }

@@ -819,13 +819,11 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
 
         (uint128 fee0, uint128 fee1) = collectProtocol();
 
-        emit SwapWithFee(
+        emit SwapFeeExcluded(
             msg.sender,
             recipient,
-            amount0,
-            amount1,
-            fee0,
-            fee1,
+            amount0 - int128(fee0),
+            amount1 - int128(fee1),
             state.sqrtPriceX96,
             state.liquidity,
             state.tick
