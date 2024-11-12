@@ -79,6 +79,18 @@ interface IUniswapV3PoolEvents {
         int24 tick
     );
 
+    event SwapWithFee(
+        address indexed sender,
+        address indexed recipient,
+        int256 amount0,
+        int256 amount1,
+        uint256 fee0,
+        uint256 fee1,
+        uint160 sqrtPriceX96,
+        uint128 liquidity,
+        int24 tick
+    );
+
     /// @notice Emitted by the pool for any flashes of token0/token1
     /// @param sender The address that initiated the swap call, and that received the callback
     /// @param recipient The address that received the tokens from flash
