@@ -30,6 +30,7 @@ contract AutoDistributeTest is Setup {
         vm.startPrank(user1);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
                 address(0),
                 "Trump Frog",
                 "TROG",

@@ -92,15 +92,16 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         string data;
     }
 
-    function startWithNewTokenWithParams (NewTokenPresaleParams memory params) public payable returns (IPresale) {
-        return startWithNewToken(params.paymentToken, params.name, params.symbol, params.totalSupply, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    function startWithNewTokenWithParams (NewTokenPresaleParams memory params, address minter) public payable returns (IPresale) {
+        return startWithNewToken(minter, params.paymentToken, params.name, params.symbol, params.totalSupply, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
     }
 
-    function startWithParams (TokenPresaleParams memory params) public payable returns (IPresale) {
-        return start(params.paymentToken, params.saleToken, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    function startWithParams (TokenPresaleParams memory params, address minter) public payable returns (IPresale) {
+        return start(minter, params.paymentToken, params.saleToken, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
     }
 
     function startWithNewToken(
+        address minter,
         address paymentToken,
         string memory name,
         string memory symbol,
@@ -121,11 +122,12 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         tokenInstance.putBlacklist(config);
         uint256 minterAllocation = totalSupply - amountToSale;
         if (minterAllocation > 0) {
-            tokenInstance.transfer(msg.sender, minterAllocation);
+            tokenInstance.transfer(minter, minterAllocation);
         }
         config.putComputedTransferBlacklist(paymentToken == eth ? weth : paymentToken, token);
         return
             _create(
+                minter,
                 true,
                 paymentToken,
                 token,
@@ -143,6 +145,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
     }
 
     function start(
+        address minter,
         address paymentToken,
         address saleToken,
         uint160 sqrtPriceX96,
@@ -156,9 +159,10 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 deadline,
         string memory data
     ) public payable returns (IPresale) {
-        IERC20(saleToken).safeTransferFrom(msg.sender, address(this), amountToSale);
+        IERC20(saleToken).safeTransferFrom(minter, address(this), amountToSale);
         return
             _create(
+                minter,
                 false,
                 paymentToken,
                 saleToken,
@@ -176,6 +180,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
     }
 
     function _create(
+        address minter,
         bool isNewToken,
         address paymentToken,
         address saleToken,
@@ -209,7 +214,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             require(msg.value >= config.mintingFee(), "UniswapV3PresaleMaker: insufficient minting fee");
 
             if (amountForBuyInstantly > 0) {
-                IERC20(paymentToken).safeTransferFrom(msg.sender, address(this), amountForBuyInstantly);
+                IERC20(paymentToken).safeTransferFrom(minter, address(this), amountForBuyInstantly);
             }
         }
 
@@ -246,7 +251,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         );
 
         IPresale.PresaleInfo memory info = IPresale.PresaleInfo({
-            minter: msg.sender,
+            minter: minter,
             token: saleToken,
             pool: pool,
             paymentToken: _paymentToken,
@@ -272,7 +277,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
 
         presaleManager.register(presale);
 
-        buyInstantly(saleToken, paymentToken, amountForBuyInstantly, deadline);
+        buyInstantly(minter, saleToken, paymentToken, amountForBuyInstantly, deadline);
         sendMintingFee();
 
         return presale;
@@ -305,7 +310,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         require(liquidity > 0, "UniswapV3PresaleMaker: invalid liquidity");
     }
 
-    function buyInstantly(address token, address paymentToken, uint256 amount, uint256 deadline) internal {
+    function buyInstantly(address minter, address token, address paymentToken, uint256 amount, uint256 deadline) internal {
         if (amount == 0) {
             return;
         }
@@ -324,6 +329,6 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
                 0
             )
         );
-        IERC20(token).safeTransfer(msg.sender, amountOut);
+        IERC20(token).safeTransfer(minter, amountOut);
     }
 }

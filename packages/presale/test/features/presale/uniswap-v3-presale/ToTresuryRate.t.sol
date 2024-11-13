@@ -17,6 +17,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.startPrank(user);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
+                user,
                 address(0),
                 "Trump Frog",
                 "TROG",
