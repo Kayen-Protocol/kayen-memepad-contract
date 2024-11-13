@@ -11,6 +11,7 @@ contract UniswapV3PresaleMakerTest is Setup {
         vm.startPrank(user1);
         {
             uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
                 address(weth),
                 "Trump Frog",
                 "TROG",
@@ -36,6 +37,7 @@ contract UniswapV3PresaleMakerTest is Setup {
         {
             vm.expectRevert();
             uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
                 address(testToken),
                 "Trump Frog",
                 "TROG",
@@ -61,6 +63,7 @@ contract UniswapV3PresaleMakerTest is Setup {
             ERC20 memeToken = new MockERC20("Meme", "MEME", 1000000000e18);
             memeToken.approve(address(uniswapV3PresaleMaker), 1000000000e18);
             uniswapV3PresaleMaker.start(
+                user1,
                 address(weth),
                 address(memeToken),
                 25054144837504793118641380,

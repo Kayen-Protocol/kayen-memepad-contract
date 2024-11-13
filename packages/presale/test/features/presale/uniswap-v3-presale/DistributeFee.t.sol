@@ -49,6 +49,7 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
             configuration.putDefaultDistributionFeeRate(5e6 / 100); // 5%
             configuration.putDistributionFeeRateForToken(address(bera), 1e6 / 100); // 1%
             presale = uniswapV3PresaleMaker.startWithNewToken(
+                deployer,
                 address(bera),
                 "Trump Frog",
                 "TROG",

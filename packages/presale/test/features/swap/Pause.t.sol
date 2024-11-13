@@ -22,6 +22,7 @@ contract UniswapV3PresaleTest is Setup {
         vm.startPrank(user1);
         {
             presale1 = uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
                 address(weth),
                 "Trump Frog",
                 "TROG",
@@ -38,6 +39,7 @@ contract UniswapV3PresaleTest is Setup {
                 ""
             );
             presale2 = uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
                 address(weth),
                 "Trump Frog2",
                 "TROG2",
