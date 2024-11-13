@@ -2,6 +2,8 @@
 pragma solidity >=0.6.12;
 pragma abicoder v2;
 
+import "@openzeppelin/contracts/utils/Strings.sol";
+
 import {MockDistributor} from "../../mocks/MockDistributor.sol";
 import {IPresale} from "../../../contracts/presale/IPresale.sol";
 import {UniswapV3Presale} from "../../../contracts/presale/UniswapV3Presale.sol";
@@ -9,7 +11,7 @@ import {UniswapV3Presale} from "../../../contracts/presale/UniswapV3Presale.sol"
 import {Path} from "@kayen/uniswap-v3-periphery/contracts/libraries/Path.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwapRouter.sol";
-
+import {IUniswapV3PoolEvents} from "@kayen/uniswap-v3-core/contracts/interfaces/pool/IUniswapV3PoolEvents.sol";
 import "../../Setup.sol";
 
 contract UniswapV3PresaleTest is Setup {
@@ -132,10 +134,13 @@ contract UniswapV3PresaleTest is Setup {
             );
         }
         vm.stopPrank();
+        uint256 amountOut;
         vm.startPrank(user2);
         {
             bera.approve(address(swapRouter), 10e18);
-            uint256 amountOut = swapRouter.exactInput(
+
+            vm.recordLogs();
+            amountOut = swapRouter.exactInput(
                 ISwapRouter.ExactInputParams(
                     abi.encodePacked(address(bera), poolFee, presale.info().token),
                     address(this),
@@ -146,8 +151,34 @@ contract UniswapV3PresaleTest is Setup {
             );
         }
         vm.stopPrank();
+
         assertTrue(bera.balanceOf(configuration.feeVault()) < 2e17);
         assertTrue(bera.balanceOf(configuration.feeVault()) >= 1e17);
-    }
 
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        uint256 idx = 0;
+        int256 originalAmount0;
+        int256 originalAmount1;
+        int256 feeExcludedAmount0;
+        int256 feeExcludedAmount1;
+        for (; idx < entries.length; idx++) {
+            if (entries[idx].topics[0] == IUniswapV3PoolEvents.Swap.selector) {
+                (int256 amount0, int256 amount1, uint160 c, uint128 d, int24 e) = abi.decode(
+                    entries[idx].data,
+                    (int256, int256, uint160, uint128, int24)
+                );
+                originalAmount0 = amount0;
+                originalAmount1 = amount1;
+            }
+            if (entries[idx].topics[0] == IUniswapV3PoolEvents.SwapFeeExcluded.selector) {
+                (int256 amount0, int256 amount1, uint160 c, uint128 d, int24 e) = abi.decode(
+                    entries[idx].data,
+                    (int256, int256, uint160, uint128, int24)
+                );
+                feeExcludedAmount0 = amount0;
+                feeExcludedAmount1 = amount1;
+            }
+        }
+        assertTrue(feeExcludedAmount1 + int256(bera.balanceOf(configuration.feeVault())) == originalAmount1);
+    }
 }
