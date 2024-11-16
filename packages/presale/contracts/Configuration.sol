@@ -8,6 +8,7 @@ import "./distributor/IDistributor.sol";
 contract Configuration is Ownable, IBlacklist {
     mapping(address => bool) public paymentTokenWhitelist;
     mapping(address => bool) public distributorWhitelist;
+    mapping(address => bool) public whitelistedContract;
     IDistributor[] public distributors;
     mapping(address => bool) public presaleMakers;
     mapping(address => bool) public isPoolPaused;
@@ -49,6 +50,18 @@ contract Configuration is Ownable, IBlacklist {
 
     function disallowTokenForPayment(address token) external onlyOwner {
         paymentTokenWhitelist[token] = false;
+    }
+
+    function allowWhitelistedContract(address _whitelistedContract) external onlyOwner {
+        whitelistedContract[_whitelistedContract] = true;
+    }
+
+    function disallowWhitelistedContract(address _whitelistedContract) external onlyOwner {
+        whitelistedContract[_whitelistedContract] = false;
+    }
+
+    function isWhitelistedContract(address _whitelistedContract) external view returns (bool) {
+        return whitelistedContract[_whitelistedContract];
     }
 
     function allowDistributor(address distributor) external onlyOwner {
