@@ -22,7 +22,7 @@ contract Setup is Test, SetupAddresses {
 
             configuration.allowDistributor(address(uniswapV2Distributor));
             configuration.allowDistributor(address(uniswapV3Distributor));
-
+            configuration.allowWhitelistedContract(deployer);
             configuration.putDefaultTradeFee(0);
         }
         vm.stopPrank();

@@ -202,8 +202,8 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             startTimestamp == 0 || startTimestamp >= block.timestamp,
             "UniswapV3PresaleMaker: start timestamp cannot be in the past"
         );
-        // if contract is not whitelisted, minter can be different from msg.sender
-        if (!config.isWhitelistedContract(address(this))) {
+        // if sender is not whitelisted, minter can be different from msg.sender
+        if (!config.isWhitelistedContract(msg.sender)) {
             require(minter == msg.sender, "UniswapV3PresaleMaker: minter must be msg.sender");
         }
 

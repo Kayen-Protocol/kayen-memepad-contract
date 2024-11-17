@@ -11,7 +11,7 @@ contract UniswapV3PresaleMakerTest is Setup {
         vm.startPrank(user1);
         {
             uniswapV3PresaleMaker.startWithNewToken(
-                msg.sender,
+                user1,
                 address(weth),
                 "Trump Frog",
                 "TROG",
@@ -37,7 +37,7 @@ contract UniswapV3PresaleMakerTest is Setup {
         {
             vm.expectRevert();
             uniswapV3PresaleMaker.startWithNewToken(
-                msg.sender,
+                user1,
                 address(testToken),
                 "Trump Frog",
                 "TROG",
@@ -80,4 +80,55 @@ contract UniswapV3PresaleMakerTest is Setup {
         }
         vm.stopPrank();
     }
+
+    function test_create_presale_whitelisted_contract() external {
+
+        vm.startPrank(deployer);
+        {
+            uniswapV3PresaleMaker.startWithNewToken(
+                user1,
+                address(weth),
+                "Trump Frog",
+                "TROG",
+                1000000000e18,
+                7922816251426433759354395,
+                -180162,
+                23027,
+                1000000000e18,
+                10e18,
+                0,
+                0,
+                0,
+                block.timestamp + 100,
+                ""
+            );
+        }
+        vm.stopPrank();
+    }
+
+    function test_create_presale_should_fail_when_not_whitelisted_contract() external {
+        vm.startPrank(user1);
+        {
+            vm.expectRevert();
+            uniswapV3PresaleMaker.startWithNewToken(
+                msg.sender,
+                address(weth),
+                "Trump Frog",
+                "TROG",
+                1000000000e18,
+                7922816251426433759354395,
+                -180162,
+                23027,
+                1000000000e18,
+                10e18,
+                0,
+                0,
+                0,
+                block.timestamp + 100,
+                ""
+            );
+        }
+        vm.stopPrank();
+    }
+
 }
