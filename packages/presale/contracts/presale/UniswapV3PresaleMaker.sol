@@ -9,7 +9,6 @@ import "@kayen/token/contracts/CommonToken.sol";
 import {Quoter} from "@kayen/uniswap-v3-periphery/contracts/lens/Quoter.sol";
 
 import {PresaleManager} from "../presale-manager/PresaleManager.sol";
-import {UniswapV2Library} from "@kayen/uniswap-v2-periphery/contracts/libraries/UniswapV2Library.sol";
 import {UniswapV3Presale} from "./UniswapV3Presale.sol";
 import {ERC721Receiver} from "../libraries/ERC721Receiver.sol";
 
@@ -76,7 +75,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         uint256 deadline;
         string data;
     }
-    
+
     struct TokenPresaleParams {
         address paymentToken;
         address saleToken;
@@ -92,12 +91,47 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         string data;
     }
 
-    function startWithNewTokenWithParams (NewTokenPresaleParams memory params, address minter) public payable returns (IPresale) {
-        return startWithNewToken(minter, params.paymentToken, params.name, params.symbol, params.totalSupply, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    function startWithNewTokenWithParams(
+        NewTokenPresaleParams memory params,
+        address minter
+    ) public payable returns (IPresale) {
+        return
+            startWithNewToken(
+                minter,
+                params.paymentToken,
+                params.name,
+                params.symbol,
+                params.totalSupply,
+                params.sqrtPriceX96,
+                params.tickLower,
+                params.tickUpper,
+                params.amountToSale,
+                params.amountToRaise,
+                params.amountForBuyInstantly,
+                params.toTreasuryRate,
+                params.startTimestamp,
+                params.deadline,
+                params.data
+            );
     }
 
-    function startWithParams (TokenPresaleParams memory params, address minter) public payable returns (IPresale) {
-        return start(minter, params.paymentToken, params.saleToken, params.sqrtPriceX96, params.tickLower, params.tickUpper, params.amountToSale, params.amountToRaise, params.amountForBuyInstantly, params.toTreasuryRate, params.startTimestamp, params.deadline, params.data);
+    function startWithParams(TokenPresaleParams memory params, address minter) public payable returns (IPresale) {
+        return
+            start(
+                minter,
+                params.paymentToken,
+                params.saleToken,
+                params.sqrtPriceX96,
+                params.tickLower,
+                params.tickUpper,
+                params.amountToSale,
+                params.amountToRaise,
+                params.amountForBuyInstantly,
+                params.toTreasuryRate,
+                params.startTimestamp,
+                params.deadline,
+                params.data
+            );
     }
 
     function startWithNewToken(
@@ -226,17 +260,12 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         require(tokenInstance.balanceOf(address(this)) >= amountToSale, "UniswapV3PresaleMaker: insufficient balance");
         require(amountToSale > 0, "UniswapV3PresaleMaker: sale amount must be greater than 0");
 
-        (address token0, address token1) = UniswapV2Library.sortTokens(_paymentToken, saleToken);
+        (address token0, address token1) = paymentToken < saleToken
+            ? (paymentToken, saleToken)
+            : (saleToken, paymentToken);
         address pool = poolFactory.createPool(token0, token1, poolFee);
         IUniswapV3Pool(pool).initialize(sqrtPriceX96);
 
-        assertValidParams(
-            pool,
-            tickLower,
-            tickUpper,
-            token0 == saleToken ? amountToSale : 0,
-            token1 == saleToken ? amountToSale : 0
-        );
         tokenInstance.forceApprove(address(positionManager), amountToSale);
         (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1) = positionManager.mint(
             INonfungiblePositionManager.MintParams({
@@ -293,28 +322,13 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         }
     }
 
-    function assertValidParams(
-        address pool,
-        int24 tickLower,
-        int24 tickUpper,
-        uint256 amount0Desired,
-        uint256 amount1Desired
-    ) public {
-        (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(pool).slot0();
-        uint160 sqrtRatioAX96 = TickMath.getSqrtRatioAtTick(tickLower);
-        uint160 sqrtRatioBX96 = TickMath.getSqrtRatioAtTick(tickUpper);
-
-        uint256 liquidity = LiquidityAmounts.getLiquidityForAmounts(
-            sqrtPriceX96,
-            sqrtRatioAX96,
-            sqrtRatioBX96,
-            amount0Desired,
-            amount1Desired
-        );
-        require(liquidity > 0, "UniswapV3PresaleMaker: invalid liquidity");
-    }
-
-    function buyInstantly(address minter, address token, address paymentToken, uint256 amount, uint256 deadline) internal {
+    function buyInstantly(
+        address minter,
+        address token,
+        address paymentToken,
+        uint256 amount,
+        uint256 deadline
+    ) internal {
         if (amount == 0) {
             return;
         }
