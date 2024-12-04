@@ -242,14 +242,12 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         }
 
         address _paymentToken = paymentToken;
+        uint256 _mintingFee = config.mintingFee();
         if (eth == paymentToken) {
-            require(
-                msg.value >= amountForBuyInstantly + config.mintingFee(),
-                "UniswapV3PresaleMaker: insufficient fees"
-            );
+            require(msg.value >= amountForBuyInstantly + _mintingFee, "UniswapV3PresaleMaker: insufficient fees");
             _paymentToken = weth;
         } else {
-            require(msg.value >= config.mintingFee(), "UniswapV3PresaleMaker: insufficient minting fee");
+            require(msg.value >= _mintingFee, "UniswapV3PresaleMaker: insufficient minting fee");
 
             if (amountForBuyInstantly > 0) {
                 IERC20(paymentToken).safeTransferFrom(minter, address(this), amountForBuyInstantly);
@@ -313,14 +311,14 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         presaleManager.register(presale);
 
         buyInstantly(minter, saleToken, paymentToken, amountForBuyInstantly, deadline);
-        sendMintingFee();
+        sendMintingFee(_mintingFee);
 
         return presale;
     }
 
-    function sendMintingFee() internal {
-        if (config.mintingFee() > 0) {
-            payable(config.feeVault()).call{value: config.mintingFee()}("");
+    function sendMintingFee(uint256 _mintingFee) internal {
+        if (_mintingFee > 0) {
+            payable(config.feeVault()).call{value: _mintingFee}("");
         }
     }
 
