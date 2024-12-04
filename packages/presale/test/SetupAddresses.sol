@@ -25,6 +25,7 @@ import {UniswapV3Distributor} from "../contracts/distributor/UniswapV3Distributo
 import {Configuration} from "../contracts/Configuration.sol";
 import {PresaleManager} from "../contracts/presale-manager/PresaleManager.sol";
 import {UniswapV3PresaleMaker} from "../contracts/presale/UniswapV3PresaleMaker.sol";
+import {OriginalPoolAddress} from "./mocks/uniswap-v3/PoolAddress.sol";
 
 contract SetupAddresses is Test {
     address deadAddress = 0x000000000000000000000000000000000000dEaD;
@@ -93,7 +94,7 @@ contract SetupAddresses is Test {
             externalV2SwapRouter = new UniswapV2Router01(address(externalV2Factory), address(weth));
 
             uniswapV2Distributor = new UniswapV2Distributor(configuration, externalV2Factory, externalV2SwapRouter);
-            uniswapV3Distributor = new UniswapV3Distributor(configuration, externalV3Factory, externalV3PositionManager);
+            uniswapV3Distributor = new UniswapV3Distributor(configuration, externalV3Factory, externalV3PositionManager, OriginalPoolAddress.POOL_INIT_CODE_HASH);
         }
         vm.stopPrank();
 

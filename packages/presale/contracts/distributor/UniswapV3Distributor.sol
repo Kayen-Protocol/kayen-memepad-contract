@@ -22,22 +22,37 @@ contract UniswapV3Distributor is Distributor {
     uint24 fee = 100;
     IUniswapV3Factory immutable factory;
     INonfungiblePositionManager immutable positionManager;
+    bytes32 immutable poolInitCodeHash;
 
     constructor(
         Configuration _config,
         IUniswapV3Factory _factory,
-        INonfungiblePositionManager _positionManager
+        INonfungiblePositionManager _positionManager,
+        bytes32 _poolInitCodeHash
     ) Distributor(_config) {
         factory = _factory;
         positionManager = _positionManager;
+        poolInitCodeHash = _poolInitCodeHash;
     }
 
     function getPoolAddress(address token0, address token1) external returns (address) {
-        (address tokenA, address tokenB) = UniswapV2Library.sortTokens(token0, token1);
-        if (factory.getPool(tokenA, tokenB, fee) == address(0)) {
-            factory.createPool(token0, token1, fee);
-        }
-        return address(factory.getPool(tokenA, tokenB, fee));
+        (address tokenA, address tokenB) = token0 < token1 ? (token0, token1) : (token1, token0);
+        bytes32 salt = keccak256(abi.encodePacked(tokenA, tokenB, fee));
+        address poolAddress = address(
+            uint160(
+                uint256(
+                    keccak256(
+                        abi.encodePacked(
+                            hex"ff",
+                            address(factory),
+                            keccak256(abi.encode(tokenA, tokenB, fee)),
+                            poolInitCodeHash
+                        )
+                    )
+                )
+            )
+        );
+        return poolAddress;
     }
 
     function canDistribute(address token0, address token1) public view override returns (bool) {

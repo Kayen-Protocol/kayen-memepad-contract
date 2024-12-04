@@ -111,7 +111,8 @@ contract UniswapV2DistributorTest is Setup {
                 )
             );
             (address token0, address token1) = UniswapV2Library.sortTokens(address(weth), token);
-            IUniswapV3Pool pool = IUniswapV3Pool(externalV3Factory.getPool(token0, token1, poolFee));
+            address poolAddress = externalV3Factory.createPool(token0, token1, poolFee);
+            IUniswapV3Pool pool = IUniswapV3Pool(poolAddress);
             pool.initialize(7922816251426433759354395);
             IERC20(token).approve(address(externalV3PositionManager), amountOut);
 
