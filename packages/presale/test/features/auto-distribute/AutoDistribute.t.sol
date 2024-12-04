@@ -31,7 +31,7 @@ contract AutoDistributeTest is Setup {
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
                 user1,
-                address(0),
+                address(weth),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,
@@ -70,5 +70,4 @@ contract AutoDistributeTest is Setup {
 
         assert(presale.info().isEnd);
     }
-
 }

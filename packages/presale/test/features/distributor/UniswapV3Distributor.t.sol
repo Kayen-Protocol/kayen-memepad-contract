@@ -32,7 +32,7 @@ contract UniswapV2DistributorTest is Setup {
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
                 user1,
-                address(0),
+                address(weth),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,
@@ -51,7 +51,9 @@ contract UniswapV2DistributorTest is Setup {
         vm.stopPrank();
         vm.startPrank(deployer);
         {
-            configuration.removeTransferBlacklist(uniswapV3Distributor.getPoolAddress(presale.info().token, address(weth)));
+            configuration.removeTransferBlacklist(
+                uniswapV3Distributor.getPoolAddress(presale.info().token, address(weth))
+            );
         }
         vm.stopPrank();
         vm.deal(user2, 30 ether);
@@ -63,7 +65,12 @@ contract UniswapV2DistributorTest is Setup {
         token0.transfer(address(uniswapV3Distributor), 1000000000e18);
         token1.transfer(address(uniswapV3Distributor), 1000000000e18);
 
-        uniswapV3Distributor.distribute(address(token0), address(token1), 7922816251426433759354395, block.timestamp + 100);
+        uniswapV3Distributor.distribute(
+            address(token0),
+            address(token1),
+            7922816251426433759354395,
+            block.timestamp + 100
+        );
     }
 
     function test_distribute_by_presale() external {

@@ -11,14 +11,13 @@ import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwa
 import "./UniswapV3Presale.t.sol";
 
 contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
-
     function test_to_tresury_rate() external {
         uint24 toTresuryRato = 5e5;
         vm.startPrank(user);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken(
                 user,
-                address(0),
+                address(weth),
                 "Trump Frog",
                 "TROG",
                 totalSupply,
@@ -50,14 +49,14 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         }
         vm.stopPrank();
 
-
         vm.startPrank(user);
         {
             assertTrue(presale.getProgress() >= 1e6);
             presale.distribute(address(uniswapV2Distributor), block.timestamp + 100);
 
-            uint256 expectedEth = 10e18 / 2 * 99e16 / 1e18;
-            uint256 expectedToken = (totalSupply - IERC20(presale.info().token).balanceOf(user2)) / 2  * 99e16 / 1e18;
+            uint256 expectedEth = ((10e18 / 2) * 99e16) / 1e18;
+            uint256 expectedToken = (((totalSupply - IERC20(presale.info().token).balanceOf(user2)) / 2) * 99e16) /
+                1e18;
 
             assertTrue(weth.balanceOf(user) >= expectedEth);
             assertTrue(IERC20(presale.info().token).balanceOf(user) >= expectedToken);

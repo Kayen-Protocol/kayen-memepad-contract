@@ -71,7 +71,7 @@ export const config: HardhatUserConfig = {
       tags: ["stroy_testnet"],
       saveDeployments: true,
       gasPrice: 1000000000,
-    }
+    },
   },
   namedAccounts: {
     deployer: { default: 0 },

@@ -11,7 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
   const { chainId } = await ethers.provider.getNetwork();
-  
+
   const { V2_FACTORY, V2_ROUTER } = getNetworkAddresses(chainId);
 
   const configuration = await deployments.get("Configuration");

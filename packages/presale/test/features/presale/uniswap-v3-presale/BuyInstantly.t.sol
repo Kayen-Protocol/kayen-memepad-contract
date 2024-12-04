@@ -11,13 +11,12 @@ import {ISwapRouter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/ISwa
 import "./UniswapV3Presale.t.sol";
 
 contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
-
     function test_buy_instantly() external {
         vm.startPrank(user2);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken{value: 1e18}(
                 user2,
-                address(0),
+                address(weth),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,
@@ -36,5 +35,4 @@ contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
         vm.stopPrank();
         assertTrue(presale.getProgress() >= 99e3);
     }
-
 }
