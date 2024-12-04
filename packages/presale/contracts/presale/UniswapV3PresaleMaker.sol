@@ -257,34 +257,20 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         }
 
         IERC20 tokenInstance = IERC20(saleToken);
-        require(tokenInstance.balanceOf(address(this)) >= amountToSale, "UniswapV3PresaleMaker: insufficient balance");
-        require(amountToSale > 0, "UniswapV3PresaleMaker: sale amount must be greater than 0");
+        require(
+            amountToSale > 0 && tokenInstance.balanceOf(address(this)) >= amountToSale,
+            "UniswapV3PresaleMaker: invalid sale amount or insufficient balance"
+        );
 
         (address token0, address token1) = paymentToken < saleToken
             ? (paymentToken, saleToken)
             : (saleToken, paymentToken);
+
         address pool = poolFactory.createPool(token0, token1, poolFee);
         IUniswapV3Pool(pool).initialize(sqrtPriceX96);
 
-        tokenInstance.forceApprove(address(positionManager), amountToSale);
-        (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1) = positionManager.mint(
-            INonfungiblePositionManager.MintParams({
-                token0: token0,
-                token1: token1,
-                fee: poolFee,
-                tickLower: tickLower,
-                tickUpper: tickUpper,
-                amount0Desired: token0 == saleToken ? amountToSale : 0,
-                amount1Desired: token1 == saleToken ? amountToSale : 0,
-                amount0Min: 0,
-                amount1Min: 0,
-                recipient: address(this),
-                deadline: deadline
-            })
-        );
-
         IPresale.PresaleInfo memory info = IPresale.PresaleInfo({
-            minter: minter,
+            minter: msg.sender,
             token: saleToken,
             pool: pool,
             paymentToken: _paymentToken,
@@ -299,10 +285,26 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
 
         ERC1967Proxy proxy = new ERC1967Proxy(
             address(implementation),
-            abi.encodeCall(implementation.initialize, (swapRouter, positionManager, quoter, tokenId, info, config))
+            abi.encodeCall(implementation.initialize, (swapRouter, positionManager, quoter, info, config))
         );
         IPresale presale = IPresale(address(proxy));
-        positionManager.safeTransferFrom(address(this), address(presale), tokenId);
+
+        tokenInstance.forceApprove(address(positionManager), amountToSale);
+        (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1) = positionManager.mint(
+            INonfungiblePositionManager.MintParams({
+                token0: token0,
+                token1: token1,
+                fee: poolFee,
+                tickLower: tickLower,
+                tickUpper: tickUpper,
+                amount0Desired: token0 == saleToken ? amountToSale : 0,
+                amount1Desired: token1 == saleToken ? amountToSale : 0,
+                amount0Min: 0,
+                amount1Min: 0,
+                recipient: address(presale),
+                deadline: deadline
+            })
+        );
 
         if (isNewToken) {
             CommonToken(saleToken).transferOwnership(address(presale));

@@ -15,7 +15,6 @@ import {IQuoter} from "@kayen/uniswap-v3-periphery/contracts/interfaces/IQuoter.
 
 contract UniswapV3Presale is Presale {
     INonfungiblePositionManager positionManager;
-    uint256 private tokenId;
     ISwapRouter private swapRouter;
     IQuoter private quoter;
 
@@ -23,7 +22,6 @@ contract UniswapV3Presale is Presale {
         ISwapRouter _swapRouter,
         INonfungiblePositionManager _positionManager,
         IQuoter _quoter,
-        uint256 _tokenId,
         PresaleInfo memory info,
         Configuration config
     ) external {
@@ -31,7 +29,6 @@ contract UniswapV3Presale is Presale {
         swapRouter = _swapRouter;
         positionManager = _positionManager;
         quoter = _quoter;
-        tokenId = _tokenId;
     }
 
     function getProgress() public view override returns (uint256) {
@@ -40,8 +37,13 @@ contract UniswapV3Presale is Presale {
         return (1e6 * raisedAmount) / _info.amountToRaise;
     }
 
+    function getTokenId() public view returns (uint256) {
+        return positionManager.tokenOfOwnerByIndex(address(this), 0);
+    }
+
     function getRaisedAmount() public view override returns (uint256) {
         PositionInfo memory positionInfo = getPositionInfo();
+        uint256 tokenId = getTokenId();
         (uint160 sqrtPriceX96, , , , , , ) = IUniswapV3Pool(_info.pool).slot0();
         (uint256 reserve0, uint256 reserve1) = PositionValue.total(positionManager, tokenId, sqrtPriceX96);
         if (positionInfo.token0 != _info.token) {
@@ -60,6 +62,7 @@ contract UniswapV3Presale is Presale {
 
     function burnPosition(uint256 deadline) internal {
         PositionInfo memory position = getPositionInfo();
+        uint256 tokenId = getTokenId();
         positionManager.decreaseLiquidity(
             INonfungiblePositionManager.DecreaseLiquidityParams(tokenId, position.liquidity, 0, 0, deadline)
         );
@@ -75,6 +78,7 @@ contract UniswapV3Presale is Presale {
     }
 
     function getPositionInfo() public view returns (PositionInfo memory) {
+        uint256 tokenId = getTokenId();
         (
             uint96 nonce,
             address operator,
