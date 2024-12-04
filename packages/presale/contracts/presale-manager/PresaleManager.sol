@@ -6,10 +6,8 @@ import "../presale/IPresale.sol";
 import "../Configuration.sol";
 
 contract PresaleManager is Ownable {
-    mapping(address => bool) public isRegistered;
     mapping(address => address) public presales;
     mapping(address => address) public presalesByPool;
-    address[] public allPresales;
     Configuration config;
 
     constructor(Configuration _config) Ownable() {
@@ -19,12 +17,10 @@ contract PresaleManager is Ownable {
     function register(IPresale presale) external {
         require(config.presaleMakers(msg.sender), "PresaleManager: FORBIDDEN");
         (address tokenAddress, string memory name, string memory symbol, uint256 totalSupply) = presale.tokenInfo();
-        require(!isRegistered[tokenAddress], "PresaleManager: ALREADY_REGISTERED");
+        require(presales[tokenAddress] == address(0), "PresaleManager: ALREADY_REGISTERED");
         IPresale.PresaleInfo memory presaleInfo = presale.info();
         presales[tokenAddress] = address(presale);
-        isRegistered[tokenAddress] = true;
         presalesByPool[presaleInfo.pool] = address(presale);
-        allPresales.push(address(presale));
         emit PresaleCreated(
             name,
             symbol,
