@@ -12,11 +12,11 @@ import "./UniswapV3Presale.t.sol";
 
 contract UniswapV3PresaleFunctionTest is UniswapV3PresaleTest {
     function test_buy_instantly() external {
-        vm.startPrank(user2);
+        vm.startPrank(user1);
         {
             presale = uniswapV3PresaleMaker.startWithNewToken{value: 1e18}(
-                user2,
-                address(weth),
+                user1,
+                address(0),
                 "Trump Frog",
                 "TROG",
                 1000000000e18,

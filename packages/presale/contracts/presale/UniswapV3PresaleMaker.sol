@@ -338,15 +338,14 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             IERC20(paymentToken).forceApprove(address(swapRouter), amount);
         }
 
-        uint256 amountOut = swapRouter.exactInput{value: value}(
+        swapRouter.exactInput{value: value}(
             ISwapRouter.ExactInputParams(
                 abi.encodePacked(paymentToken == eth ? weth : paymentToken, poolFee, token),
-                address(this),
+                address(minter),
                 deadline,
                 amount,
                 0
             )
         );
-        IERC20(token).safeTransfer(minter, amountOut);
     }
 }
