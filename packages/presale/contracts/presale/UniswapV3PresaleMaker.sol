@@ -248,10 +248,6 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             _paymentToken = weth;
         } else {
             require(msg.value >= _mintingFee, "UniswapV3PresaleMaker: insufficient minting fee");
-
-            if (amountForBuyInstantly > 0) {
-                IERC20(paymentToken).safeTransferFrom(minter, address(this), amountForBuyInstantly);
-            }
         }
 
         IERC20 tokenInstance = IERC20(saleToken);
@@ -260,9 +256,9 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
             "UniswapV3PresaleMaker: invalid sale amount or insufficient balance"
         );
 
-        (address token0, address token1) = paymentToken < saleToken
-            ? (paymentToken, saleToken)
-            : (saleToken, paymentToken);
+        (address token0, address token1) = _paymentToken < saleToken
+            ? (_paymentToken, saleToken)
+            : (saleToken, _paymentToken);
 
         address pool = poolFactory.createPool(token0, token1, poolFee);
         IUniswapV3Pool(pool).initialize(sqrtPriceX96);
@@ -334,7 +330,7 @@ contract UniswapV3PresaleMaker is ERC721Receiver {
         }
         uint256 value = (paymentToken == eth) ? amount : 0;
         if (paymentToken != eth) {
-            // IERC20(paymentToken).safeTransferFrom(msg.sender, address(this), amount);
+            IERC20(paymentToken).safeTransferFrom(minter, address(this), amount);
             IERC20(paymentToken).forceApprove(address(swapRouter), amount);
         }
 
