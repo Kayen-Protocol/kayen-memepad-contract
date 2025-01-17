@@ -50,6 +50,13 @@ export const config: HardhatUserConfig = {
       tags: ["mainnet"],
       saveDeployments: true,
     },
+    story_odyssey: {
+      url: "https://odyssey-evm.spidernode.net",
+      chainId: 1516,
+      accounts: require("./secrets.json").privateKey,
+      tags: ["mainnet"],
+      saveDeployments: true,
+    },
   },
   namedAccounts: {
     deployer: { default: 0 },
