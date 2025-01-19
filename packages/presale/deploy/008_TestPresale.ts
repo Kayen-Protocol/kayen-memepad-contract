@@ -6,23 +6,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
   const { deployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
-
   const { chainId } = await ethers.provider.getNetwork();
   const { wETH } = getNetworkAddresses(chainId);
+  const deadline = (await ethers.provider.getBlock("latest")).timestamp + 100000;
 
   const configuration = await deployments.get("Configuration");
   const configurationContract = new ethers.Contract(configuration.address, configuration.abi, signer);
-  if (!(await configurationContract.paymentTokenWhitelist(wETH))) {
+  if (!(await configurationContract.paymentTokenWhitlist(wETH))) {
     const tx1 = await configurationContract.allowTokenForPayment(wETH);
     await tx1.wait();
   }
 
-  const deadline = (await ethers.provider.getBlock("latest")).timestamp + 100000;
-
   const v3PresaleMaker = await deployments.get("UniswapV3PresaleMaker");
   const contract = new ethers.Contract(v3PresaleMaker.address, v3PresaleMaker.abi, signer);
   const tx = await contract.startWithNewToken(
-    deployer,
     wETH,
     "Test MEME",
     "TMEME",
