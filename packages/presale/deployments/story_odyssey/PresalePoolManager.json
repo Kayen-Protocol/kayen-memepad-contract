@@ -1,0 +1,291 @@
+{
+  "address": "0x28558a17C15aE35dcfD2ACC847a80eeF06b7da27",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract Configuration",
+          "name": "_config",
+          "type": "address"
+        },
+        {
+          "internalType": "contract PresaleManager",
+          "name": "_manager",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pool",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "afterSwap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pool",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        }
+      ],
+      "name": "beforeSwap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFeeVault",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "token0",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "token1",
+          "type": "address"
+        }
+      ],
+      "name": "getTradeFee",
+      "outputs": [
+        {
+          "internalType": "uint24",
+          "name": "",
+          "type": "uint24"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "maker",
+          "type": "address"
+        }
+      ],
+      "name": "isWhitelistedMaker",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_quoter",
+          "type": "address"
+        }
+      ],
+      "name": "putQuoter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x2d9094136066a2ba22129c6ee2d7b1e64ac2159b73ace29e721d33b26486c311",
+  "receipt": {
+    "to": null,
+    "from": "0xbde3aD8D035905d5922f38A1ffF7904387514EC4",
+    "contractAddress": "0x28558a17C15aE35dcfD2ACC847a80eeF06b7da27",
+    "transactionIndex": 127,
+    "gasUsed": "699321",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000002800000000000000000000000000000080000000400000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000400000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xeeebb6cc9ca13a4c097dbb2dbc8d7435b5540b1a9a499cefd2e2811de8fb6f64",
+    "transactionHash": "0x2d9094136066a2ba22129c6ee2d7b1e64ac2159b73ace29e721d33b26486c311",
+    "logs": [
+      {
+        "transactionIndex": 127,
+        "blockNumber": 2082417,
+        "transactionHash": "0x2d9094136066a2ba22129c6ee2d7b1e64ac2159b73ace29e721d33b26486c311",
+        "address": "0x28558a17C15aE35dcfD2ACC847a80eeF06b7da27",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000bde3ad8d035905d5922f38a1fff7904387514ec4"
+        ],
+        "data": "0x",
+        "logIndex": 348,
+        "blockHash": "0xeeebb6cc9ca13a4c097dbb2dbc8d7435b5540b1a9a499cefd2e2811de8fb6f64"
+      }
+    ],
+    "blockNumber": 2082417,
+    "cumulativeGasUsed": "15584722",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xa7E40Ae4FdE53d400D540a66cA7Be2FF334b4df7",
+    "0x01ce602687F3Ffef9486F69Cd73fe7e7b49BeaA9"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "2b240e7b1dd49677c70e89e19d447c71",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract Configuration\",\"name\":\"_config\",\"type\":\"address\"},{\"internalType\":\"contract PresaleManager\",\"name\":\"_manager\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"pool\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"afterSwap\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"pool\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"}],\"name\":\"beforeSwap\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getFeeVault\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token1\",\"type\":\"address\"}],\"name\":\"getTradeFee\",\"outputs\":[{\"internalType\":\"uint24\",\"name\":\"\",\"type\":\"uint24\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"maker\",\"type\":\"address\"}],\"name\":\"isWhitelistedMaker\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_quoter\",\"type\":\"address\"}],\"name\":\"putQuoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/PresalePoolManager.sol\":\"PresalePoolManager\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[],\"viaIR\":true},\"sources\":{\"@kayen/token/contracts/IBlacklist.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.7.0;\\n\\ninterface IBlacklist {\\n    function isTransferBlacklisted(address target) external view returns (bool);\\n}\",\"keccak256\":\"0xc1d2c827b4b6417be6e296a6ac760b199e9ec78dd1197f86e0f4f11a7922938f\",\"license\":\"GPL-3.0\"},\"@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-2.0-or-later\\npragma solidity >=0.5.0;\\n\\ninterface IPoolConfiguration {\\n    function getTradeFee(address token0, address token1) external view returns (uint24);\\n    function getFeeVault() external view returns (address);\\n    function beforeSwap(address pool, address recipient) external;\\n    function afterSwap(address pool, uint256 deadline) external;\\n    function isWhitelistedMaker(address target) external view returns (bool);\\n}\",\"keccak256\":\"0x3b3231beab90093003039b878e9f636f9b54d958c541221e544a12915122e67d\",\"license\":\"GPL-2.0-or-later\"},\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.9.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xba43b97fba0d32eb4254f6a5a297b39a19a247082a02d6e69349e071e2946218\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"},\"contracts/Configuration.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.8.7;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"@kayen/token/contracts/IBlacklist.sol\\\";\\nimport \\\"./distributor/IDistributor.sol\\\";\\n\\ncontract Configuration is Ownable, IBlacklist {\\n    mapping(address => bool) public paymentTokenWhitelist;\\n    mapping(address => bool) public distributorWhitelist;\\n    mapping(address => bool) public whitelistedContract;\\n    IDistributor[] public distributors;\\n    mapping(address => bool) public presaleMakers;\\n    mapping(address => bool) public isPoolPaused;\\n    mapping(address => bool) public transferBlacklist;\\n\\n    address public defaultDistributor;\\n\\n    uint256 public maxPresaleDuration = 365 days;\\n    bool public isAllPoolPaused;\\n\\n    address public feeVault;\\n\\n    uint24 public defaultDistributionFeeRate = 1e6 / 100; // 0.01 = 1%\\n    mapping(address => uint24) public distributionFeeRate;\\n\\n    // amount of payment token as minting fee\\n    uint256 public mintingFee = 0;\\n\\n    uint24 public defaultTradeFee = 1e6 / 100; // 0.01 = 1%\\n    mapping(address => uint24) public tradeFee;\\n\\n    uint24 public maxTreasuryRate = 8e5; // 80%\\n\\n    constructor(address _feeVault) {\\n        feeVault = _feeVault;\\n    }\\n\\n    function putPresaleMaker(address presaleMaker) external onlyOwner {\\n        presaleMakers[presaleMaker] = true;\\n    }\\n\\n    function removePresaleMaker(address presaleMaker) external onlyOwner {\\n        presaleMakers[presaleMaker] = false;\\n    }\\n\\n    function allowTokenForPayment(address token) external onlyOwner {\\n        paymentTokenWhitelist[token] = true;\\n    }\\n\\n    function disallowTokenForPayment(address token) external onlyOwner {\\n        paymentTokenWhitelist[token] = false;\\n    }\\n\\n    function allowWhitelistedContract(address _whitelistedContract) external onlyOwner {\\n        whitelistedContract[_whitelistedContract] = true;\\n    }\\n\\n    function disallowWhitelistedContract(address _whitelistedContract) external onlyOwner {\\n        whitelistedContract[_whitelistedContract] = false;\\n    }\\n\\n    function isWhitelistedContract(address _whitelistedContract) external view returns (bool) {\\n        return whitelistedContract[_whitelistedContract];\\n    }\\n\\n    function allowDistributor(address distributor) external onlyOwner {\\n        distributorWhitelist[distributor] = true;\\n        distributors.push(IDistributor(distributor));\\n    }\\n\\n    function disallowDistributor(address distributor) external onlyOwner {\\n        distributorWhitelist[distributor] = false;\\n        for (uint256 i = 0; i < distributors.length; i++) {\\n            if (address(distributors[i]) == distributor) {\\n                distributors[i] = distributors[distributors.length - 1];\\n                distributors.pop();\\n                break;\\n            }\\n        }\\n    }\\n\\n    function isDistributorWhitelisted(address distributor) external view returns (bool) {\\n        return distributorWhitelist[distributor];\\n    }\\n\\n    function putDefaultDistributionFeeRate(uint24 feeRate) external onlyOwner {\\n        // max 30%\\n        require(feeRate <= (1e6 / 100) * 30, \\\"Configuration: default distribution fee rate must be less than 30%\\\");\\n        defaultDistributionFeeRate = feeRate;\\n\\n        emit DefaultDistributionFeeRateUpdated(feeRate);\\n    }\\n\\n    function putDistributionFeeRateForToken(address token, uint24 feeRate) external onlyOwner {\\n        // max 30%\\n        require(feeRate <= (1e6 / 100) * 30, \\\"Configuration: default distribution fee rate must be less than 30%\\\");\\n        distributionFeeRate[token] = feeRate;\\n\\n        emit DistributionFeeRateForTokenUpdated(token, feeRate);\\n    }\\n\\n    function getDistributionFeeRate(address token0, address token1) external view returns (uint24) {\\n        uint24 fee0 = distributionFeeRate[token0];\\n        uint24 fee1 = distributionFeeRate[token1];\\n        if (fee0 == 0 && fee1 == 0) {\\n            return defaultDistributionFeeRate;\\n        }\\n        return fee0 > fee1 ? fee0 : fee1;\\n    }\\n\\n    function putFeeVault(address vault) external onlyOwner {\\n        require(vault != address(0), \\\"Configuration: fee vault cannot be zero address\\\");\\n        feeVault = vault;\\n\\n        emit FeeVaultUpdated(vault);\\n    }\\n\\n    function getFeeVault() external view returns (address) {\\n        return feeVault;\\n    }\\n\\n    function isPaused(address pool) external view returns (bool) {\\n        return isPoolPaused[pool] || isPausedAll();\\n    }\\n\\n    function isPausedAll() public view returns (bool) {\\n        return isAllPoolPaused;\\n    }\\n\\n    function pause(address pool) external onlyOwner {\\n        isPoolPaused[pool] = true;\\n    }\\n\\n    function unpause(address pool) external onlyOwner {\\n        isPoolPaused[pool] = false;\\n    }\\n\\n    function pauseAll() external onlyOwner {\\n        isAllPoolPaused = true;\\n    }\\n\\n    function unpauseAll() external onlyOwner {\\n        isAllPoolPaused = false;\\n    }\\n\\n    function putMintingFee(uint256 fee) external onlyOwner {\\n        // max 30%\\n        require(fee <= 1000e18, \\\"Configuration: minting fee must be less than 1000\\\");\\n        mintingFee = fee;\\n\\n        emit MintingFeeUpdated(fee);\\n    }\\n\\n    function putDefaultTradeFee(uint24 _tradeFee) external onlyOwner {\\n        assertTradeFee(_tradeFee);\\n        defaultTradeFee = _tradeFee;\\n\\n        emit DefaultTradeFeeUpdated(_tradeFee);\\n    }\\n\\n    function putTradeFeeForToken(address token, uint24 _tradeFee) external onlyOwner {\\n        assertTradeFee(_tradeFee);\\n        tradeFee[token] = _tradeFee;\\n\\n        emit TradeFeeForTokenUpdated(token, _tradeFee);\\n    }\\n\\n    function getTradeFee(address token0, address token1) external view returns (uint24) {\\n        uint24 fee0 = tradeFee[token0];\\n        uint24 fee1 = tradeFee[token1];\\n        if (fee0 == 0 && fee1 == 0) {\\n            return defaultTradeFee;\\n        }\\n        return fee0 > fee1 ? fee0 : fee1;\\n    }\\n\\n    function putMaxTreasuryRate(uint24 rate) external onlyOwner {\\n        require(rate <= 1e6, \\\"Configuration: max treasury rate must be less than 1e6\\\");\\n        maxTreasuryRate = rate;\\n\\n        emit MaxTreasuryRateUpdated(rate);\\n    }\\n\\n    function getMaxTreasuryRate() external view returns (uint24) {\\n        return maxTreasuryRate;\\n    }\\n\\n    function assertTradeFee(uint24 _tradeFee) internal view {\\n        // max 2%\\n        require(_tradeFee <= 1e6 / 50, \\\"Configuration: trade fee must be less than 1%\\\");\\n    }\\n\\n    function assertDistributeFee(uint24 _tradeFee) internal view {\\n        // max 2%\\n        require(_tradeFee <= 1e6 / 50, \\\"Configuration: trade fee must be less than 1%\\\");\\n    }\\n\\n    function putTransferBlacklist(address target) external onlyOwner {\\n        transferBlacklist[target] = true;\\n    }\\n\\n    function putComputedTransferBlacklist(address token1, address token2) external {\\n        require(presaleMakers[msg.sender], \\\"Configuration: FORBIDDEN\\\");\\n        for (uint256 i = 0; i < distributors.length; i++) {\\n            transferBlacklist[distributors[i].getPoolAddress(token1, token2)] = true;\\n        }\\n    }\\n\\n    function removeTransferBlacklist(address target) external onlyOwner {\\n        transferBlacklist[target] = false;\\n    }\\n\\n    function isTransferBlacklisted(address target) external view returns (bool) {\\n        return transferBlacklist[target];\\n    }\\n\\n    function putMaxPresaleDuration(uint256 duration) external onlyOwner {\\n        maxPresaleDuration = duration;\\n\\n        emit MaxPresaleDurationUpdated(duration);\\n    }\\n\\n    function putDefaultDistributor(address distributor) external onlyOwner {\\n        require(distributorWhitelist[distributor], \\\"Configuration: distributor not whitelisted\\\");\\n        defaultDistributor = distributor;\\n\\n        emit DefaultDistributorUpdated(distributor);\\n    }\\n\\n    event DefaultTradeFeeUpdated(uint24 fee);\\n    event TradeFeeForTokenUpdated(address token, uint24 fee);\\n    event MintingFeeUpdated(uint256 fee);\\n    event DefaultDistributionFeeRateUpdated(uint24 fee);\\n    event DistributionFeeRateForTokenUpdated(address token, uint24 fee);\\n    event MaxTreasuryRateUpdated(uint24 rate);\\n    event MaxPresaleDurationUpdated(uint256 duration);\\n    event DefaultDistributorUpdated(address distributor);\\n    event FeeVaultUpdated(address vault);\\n}\\n\",\"keccak256\":\"0x5774ee370e8b49abbc5022eaf3757b71dd58acec20f23d9164f76297efe4657a\",\"license\":\"GPL-3.0\"},\"contracts/PresalePoolManager.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.8.7;\\n\\nimport {Configuration} from \\\"./Configuration.sol\\\";\\nimport {PresaleManager} from \\\"./presale-manager/PresaleManager.sol\\\";\\nimport {IPoolConfiguration} from \\\"@kayen/uniswap-v3-core/contracts/interfaces/IPoolConfiguration.sol\\\";\\nimport {Ownable} from \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport {IDistributor} from \\\"./distributor/IDistributor.sol\\\";\\n\\ncontract PresalePoolManager is IPoolConfiguration, Ownable {\\n    Configuration config;\\n    PresaleManager manager;\\n    address quoter;\\n\\n    constructor(Configuration _config, PresaleManager _manager) Ownable() {\\n        config = _config;\\n        manager = _manager;\\n    }\\n\\n    function getTradeFee(address token0, address token1) external view returns (uint24) {\\n        return config.getTradeFee(token0, token1);\\n    }\\n\\n    function getFeeVault() external view returns (address) {\\n        return config.getFeeVault();\\n    }\\n\\n    function beforeSwap(address pool, address recipient) external {\\n        if (recipient != quoter) {\\n            require(!checkIsPaused(pool), \\\"PresalePoolManager: Pool is paused\\\");\\n            require(!manager.isBondingCurveEnd(pool), \\\"PresalePoolManager: Bonding curve end\\\");\\n            require(!checkIsPending(pool), \\\"PresalePoolManager: Pool is pending\\\");\\n            require(!manager.isExpired(pool), \\\"PresalePoolManager: Expired\\\");\\n        }\\n    }\\n\\n    function afterSwap(address pool, uint256 deadline) external {\\n        if (!manager.isBondingCurveEnd(pool)) {\\n            return;\\n        }\\n        address distributor = config.defaultDistributor();\\n        if (distributor == address(0)) {\\n            return;\\n        }\\n        if (manager.getPresale(pool).canDistribute(distributor)) {\\n            manager.getPresale(pool).distribute(distributor, deadline);\\n        }\\n    }\\n\\n    function isWhitelistedMaker(address maker) external view returns (bool) {\\n        return config.presaleMakers(maker);\\n    }\\n\\n    function putQuoter(address _quoter) external onlyOwner {\\n        quoter = _quoter;\\n    }\\n\\n    function checkIsPending(address pool) private view returns (bool) {\\n        return manager.isPending(pool);\\n    }\\n\\n    function checkIsPaused(address pool) private view returns (bool) {\\n        return config.isPaused(pool);\\n    }\\n}\\n\",\"keccak256\":\"0x45cd9bc65693f5632f832d4f6cd96bbf3064b9cee29d7a06602936c2ba140628\",\"license\":\"GPL-3.0\"},\"contracts/distributor/IDistributor.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.8.7;\\n\\ninterface IDistributor {\\n    function distribute(address token0, address token1, uint160 sqrtPriceX96, uint256 deadline) external;\\n    function getPoolAddress(address token0, address token1) external returns (address);\\n    function canDistribute(address token0, address token1) external view returns (bool);\\n}\",\"keccak256\":\"0x9eaa8804f17c115e28333ad5095e957a6f78e8be0988b928b6378407e779796a\",\"license\":\"GPL-3.0\"},\"contracts/presale-manager/PresaleManager.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.8.7;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"../presale/IPresale.sol\\\";\\nimport \\\"../Configuration.sol\\\";\\n\\ncontract PresaleManager is Ownable {\\n    mapping(address => bool) public isRegistered;\\n    mapping(address => address) public presales;\\n    mapping(address => address) public presalesByPool;\\n    address[] public allPresales;\\n    Configuration config;\\n\\n    constructor(Configuration _config) Ownable() {\\n        config = _config;\\n    }\\n\\n    function register(IPresale presale) external {\\n        require(config.presaleMakers(msg.sender), \\\"PresaleManager: FORBIDDEN\\\");\\n        (address tokenAddress, string memory name, string memory symbol, uint256 totalSupply) = presale.tokenInfo();\\n        require(!isRegistered[tokenAddress], \\\"PresaleManager: ALREADY_REGISTERED\\\");\\n        IPresale.PresaleInfo memory presaleInfo = presale.info();\\n        presales[tokenAddress] = address(presale);\\n        isRegistered[tokenAddress] = true;\\n        presalesByPool[presaleInfo.pool] = address(presale);\\n        allPresales.push(address(presale));\\n        emit PresaleCreated(\\n            name,\\n            symbol,\\n            tokenAddress,\\n            presaleInfo.paymentToken,\\n            presaleInfo.pool,\\n            presaleInfo.amountToRaise,\\n            totalSupply,\\n            presaleInfo.amountToSale,\\n            presaleInfo.data\\n        );\\n    }\\n\\n    function isPending(address target) external view returns (bool) {\\n        IPresale presale = getPresale(target);\\n        return presale.info().startTimestamp > block.timestamp;\\n    }\\n\\n    function getPresale(address target) public view returns (IPresale) {\\n        if (address(presales[target]) == address(0)) {\\n            return IPresale(presalesByPool[target]);\\n        }\\n        return IPresale(presales[target]);\\n    }\\n\\n    function getRaisedAmount(address target) public view returns (uint256) {\\n        return getPresale(target).getRaisedAmount();\\n    }\\n\\n    function getProgress(address target) public view returns (uint256) {\\n        return getPresale(target).getProgress();\\n    }\\n\\n    function isBondingCurveEnd(address target) public view returns (bool) {\\n        return getPresale(target).isBondingCurveEnd();\\n    }\\n\\n    function isExpired(address target) public view returns (bool) {\\n        return getPresale(target).isExpired();\\n    }\\n\\n    event PresaleCreated(\\n        string name,\\n        string symbol,\\n        address token,\\n        address paymentToken,\\n        address pairAddress,\\n        uint256 presaleAmount,\\n        uint256 totalSupply,\\n        uint256 saleAmount,\\n        string data\\n    );\\n}\\n\",\"keccak256\":\"0x14e09cc4a98cc92eec6e6c978db74bba00cf232dcd8cdbbb313e76d14e36c02d\",\"license\":\"GPL-3.0\"},\"contracts/presale/IPresale.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity >=0.8.7;\\n\\nimport {IDistributor} from \\\"../distributor/IDistributor.sol\\\";\\n\\ninterface IPresale {\\n    function tokenInfo() external returns (address, string memory, string memory, uint256);\\n    function getProgress() external view returns (uint256);\\n    function getRaisedAmount() external view returns (uint256);\\n    function isBondingCurveEnd() external view returns (bool);\\n    function distribute(address distributor, uint256 deadline) external;\\n    function canDistribute(address distributor) external view returns (bool);\\n    function info() external view returns (PresaleInfo memory);\\n    function isEnd() external view returns (bool);\\n    function isExpired() external view returns (bool);\\n\\n    struct PresaleInfo {\\n        address minter;\\n        address token;\\n        address pool;\\n\\n        address paymentToken;\\n        uint256 amountToRaise;\\n\\n        uint256 amountToSale;\\n        string data;\\n\\n        // 1e6 => 100%;\\n        uint24 toTreasuryRate;\\n\\n        bool isEnd;\\n        uint256 startTimestamp;\\n        bool isNewToken;\\n    }\\n\\n    event Distributed();\\n}\",\"keccak256\":\"0x5556338cc2c26c7e1c18d387f0f44cf3878d209833af24574f4b7b2214985f35\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x6080346100c057601f610b3c38819003918201601f19168301916001600160401b038311848410176100c55780849260409485528339810103126100c05780516001600160a01b0391828216918290036100c05760200151908282168092036100c0576000549060018060a01b0319913383821617600055604051943391167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0600080a38160015416176001556002541617600255610a6090816100dc8239f35b600080fd5b634e487b7160e01b600052604160045260246000fdfe6040608081526004908136101561001557600080fd5b6000803560e01c806339062909146106b7578063715018a61461065d5780638da5cb5b1461063157806391f5bb07146105ec578063e4b9f08f14610561578063ec0f7cf0146104d8578063f286b19e1461020f578063f2fde38b1461014c5763f56681bf1461008357600080fd5b34610131578160031936011261013157602061009d6106df565b60446100a76106fa565b600154865163f56681bf60e01b81526001600160a01b0394851698810198909852908316602488015286928391165afa9283156101405781936100f4575b60208462ffffff855191168152f35b9092506020813d8211610138575b8161010f60209383610768565b8101031261013457519162ffffff83168303610131575062ffffff60206100e5565b80fd5b8280fd5b3d9150610102565b509051903d90823e3d90fd5b509134610134576020366003190112610134576101676106df565b90610170610710565b6001600160a01b039182169283156101bd57505082546001600160a01b0319811683178455167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08380a380f35b906020608492519162461bcd60e51b8352820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b6064820152fd5b5091903461013457806003193601126101345761022a6106df565b6102326106fa565b6003546001600160a01b0393919084169084160361024e578480f35b826001541683825180958195635b14f18360e01b835216928388830152602095869160249889915afa9081156103f75788916104bb575b5061046e5760025416908251632b09880360e11b8152818782015284818781865afa9081156103f7578891610451575b50610401578251635003a2db60e11b815286810182905284818781865afa9081156103f75788916103da575b5061038c5783908584518094819363ba2eb54160e01b83528a8301525afa908115610382578691610355575b50610316578480f35b5162461bcd60e51b815292830152601b908201527f50726573616c65506f6f6c4d616e616765723a204578706972656400000000006044820152606490fd5b6103759150833d851161037b575b61036d8183610768565b8101906107bf565b3861030d565b503d610363565b82513d88823e3d90fd5b825162461bcd60e51b81528087018590526023818701527f50726573616c65506f6f6c4d616e616765723a20506f6f6c2069732070656e64604482015262696e6760e81b6064820152608490fd5b6103f19150853d871161037b5761036d8183610768565b386102e1565b84513d8a823e3d90fd5b825162461bcd60e51b81528087018590526025818701527f50726573616c65506f6f6c4d616e616765723a20426f6e64696e6720637572766044820152641948195b9960da1b6064820152608490fd5b6104689150853d871161037b5761036d8183610768565b386102b5565b825162461bcd60e51b81528087018590526022818701527f50726573616c65506f6f6c4d616e616765723a20506f6f6c2069732070617573604482015261195960f21b6064820152608490fd5b6104d29150853d871161037b5761036d8183610768565b38610285565b509190346101345782600319360112610134576001548151630ec0f7cf60e41b8152926001600160a01b0392916020918591829086165afa9283156105575760209493610528575b505191168152f35b610549919350843d8111610550575b6105418183610768565b8101906107a0565b9138610520565b503d610537565b81513d86823e3d90fd5b5091903461013457602036600319011261013457602061057f6106df565b6001548351632066bf6d60e21b81526001600160a01b039283169581019590955284916024918391165afa9182156105e257602093926105c3575b50519015158152f35b6105db919250833d811161037b5761036d8183610768565b90386105ba565b81513d85823e3d90fd5b5034610131576020366003190112610131576106066106df565b61060e610710565b60018060a01b03166bffffffffffffffffffffffff60a01b600354161760035580f35b509034610659578160031936011261065957905490516001600160a01b039091168152602090f35b5080fd5b5034610131578060031936011261013157610676610710565b80546001600160a01b03198116825581906001600160a01b03167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08280a380f35b50903461065957366003190112610131576106dc6106d36106df565b602435906107d7565b80f35b600435906001600160a01b03821682036106f557565b600080fd5b602435906001600160a01b03821682036106f557565b6000546001600160a01b0316330361072457565b606460405162461bcd60e51b815260206004820152602060248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152fd5b90601f8019910116810190811067ffffffffffffffff82111761078a57604052565b634e487b7160e01b600052604160045260246000fd5b908160209103126106f557516001600160a01b03811681036106f55790565b908160209103126106f5575180151581036106f55790565b60025460408051632b09880360e11b81526001600160a01b0393841660048083018290529294602494919290916020919083169082818881855afa9081156109f857600091610a0d575b5015610a0357848284600154168951928380926301cc382760e71b82525afa9081156109f8579084916000916109db575b50169384156109d05787516377ce88eb60e01b808252878201839052919084818a81875afa9081156109a657878a8a898e8a956000976109b1575b505195869485936302f1b49760e21b8552840152165afa9081156109a657600091610989575b506108c5575b50505050505050505050565b8784928a51948593849283528a8301525afa91821561097e57600092610961575b50501694853b156106f55760446000928387519889948593631f72642160e31b855288850152888401525af1801561095657610928575b8080808080806108b9565b67ffffffffffffffff8411610943575050523880808061091d565b604190634e487b7160e01b600052526000fd5b83513d6000823e3d90fd5b6109779250803d10610550576105418183610768565b38806108e6565b87513d6000823e3d90fd5b6109a09150853d871161037b5761036d8183610768565b386108b3565b8a513d6000823e3d90fd5b6109c9919750863d8811610550576105418183610768565b953861088d565b505050505050505050565b6109f29150843d8611610550576105418183610768565b38610852565b88513d6000823e3d90fd5b5050505050505050565b610a249150833d851161037b5761036d8183610768565b3861082156fea2646970667358221220e7aeaed57ffce9428ca662f35e28ba09a25a1fb35cd871cdc7f7861e65f4a7ea64736f6c63430008130033",
+  "deployedBytecode": "0x6040608081526004908136101561001557600080fd5b6000803560e01c806339062909146106b7578063715018a61461065d5780638da5cb5b1461063157806391f5bb07146105ec578063e4b9f08f14610561578063ec0f7cf0146104d8578063f286b19e1461020f578063f2fde38b1461014c5763f56681bf1461008357600080fd5b34610131578160031936011261013157602061009d6106df565b60446100a76106fa565b600154865163f56681bf60e01b81526001600160a01b0394851698810198909852908316602488015286928391165afa9283156101405781936100f4575b60208462ffffff855191168152f35b9092506020813d8211610138575b8161010f60209383610768565b8101031261013457519162ffffff83168303610131575062ffffff60206100e5565b80fd5b8280fd5b3d9150610102565b509051903d90823e3d90fd5b509134610134576020366003190112610134576101676106df565b90610170610710565b6001600160a01b039182169283156101bd57505082546001600160a01b0319811683178455167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08380a380f35b906020608492519162461bcd60e51b8352820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b6064820152fd5b5091903461013457806003193601126101345761022a6106df565b6102326106fa565b6003546001600160a01b0393919084169084160361024e578480f35b826001541683825180958195635b14f18360e01b835216928388830152602095869160249889915afa9081156103f75788916104bb575b5061046e5760025416908251632b09880360e11b8152818782015284818781865afa9081156103f7578891610451575b50610401578251635003a2db60e11b815286810182905284818781865afa9081156103f75788916103da575b5061038c5783908584518094819363ba2eb54160e01b83528a8301525afa908115610382578691610355575b50610316578480f35b5162461bcd60e51b815292830152601b908201527f50726573616c65506f6f6c4d616e616765723a204578706972656400000000006044820152606490fd5b6103759150833d851161037b575b61036d8183610768565b8101906107bf565b3861030d565b503d610363565b82513d88823e3d90fd5b825162461bcd60e51b81528087018590526023818701527f50726573616c65506f6f6c4d616e616765723a20506f6f6c2069732070656e64604482015262696e6760e81b6064820152608490fd5b6103f19150853d871161037b5761036d8183610768565b386102e1565b84513d8a823e3d90fd5b825162461bcd60e51b81528087018590526025818701527f50726573616c65506f6f6c4d616e616765723a20426f6e64696e6720637572766044820152641948195b9960da1b6064820152608490fd5b6104689150853d871161037b5761036d8183610768565b386102b5565b825162461bcd60e51b81528087018590526022818701527f50726573616c65506f6f6c4d616e616765723a20506f6f6c2069732070617573604482015261195960f21b6064820152608490fd5b6104d29150853d871161037b5761036d8183610768565b38610285565b509190346101345782600319360112610134576001548151630ec0f7cf60e41b8152926001600160a01b0392916020918591829086165afa9283156105575760209493610528575b505191168152f35b610549919350843d8111610550575b6105418183610768565b8101906107a0565b9138610520565b503d610537565b81513d86823e3d90fd5b5091903461013457602036600319011261013457602061057f6106df565b6001548351632066bf6d60e21b81526001600160a01b039283169581019590955284916024918391165afa9182156105e257602093926105c3575b50519015158152f35b6105db919250833d811161037b5761036d8183610768565b90386105ba565b81513d85823e3d90fd5b5034610131576020366003190112610131576106066106df565b61060e610710565b60018060a01b03166bffffffffffffffffffffffff60a01b600354161760035580f35b509034610659578160031936011261065957905490516001600160a01b039091168152602090f35b5080fd5b5034610131578060031936011261013157610676610710565b80546001600160a01b03198116825581906001600160a01b03167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08280a380f35b50903461065957366003190112610131576106dc6106d36106df565b602435906107d7565b80f35b600435906001600160a01b03821682036106f557565b600080fd5b602435906001600160a01b03821682036106f557565b6000546001600160a01b0316330361072457565b606460405162461bcd60e51b815260206004820152602060248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152fd5b90601f8019910116810190811067ffffffffffffffff82111761078a57604052565b634e487b7160e01b600052604160045260246000fd5b908160209103126106f557516001600160a01b03811681036106f55790565b908160209103126106f5575180151581036106f55790565b60025460408051632b09880360e11b81526001600160a01b0393841660048083018290529294602494919290916020919083169082818881855afa9081156109f857600091610a0d575b5015610a0357848284600154168951928380926301cc382760e71b82525afa9081156109f8579084916000916109db575b50169384156109d05787516377ce88eb60e01b808252878201839052919084818a81875afa9081156109a657878a8a898e8a956000976109b1575b505195869485936302f1b49760e21b8552840152165afa9081156109a657600091610989575b506108c5575b50505050505050505050565b8784928a51948593849283528a8301525afa91821561097e57600092610961575b50501694853b156106f55760446000928387519889948593631f72642160e31b855288850152888401525af1801561095657610928575b8080808080806108b9565b67ffffffffffffffff8411610943575050523880808061091d565b604190634e487b7160e01b600052526000fd5b83513d6000823e3d90fd5b6109779250803d10610550576105418183610768565b38806108e6565b87513d6000823e3d90fd5b6109a09150853d871161037b5761036d8183610768565b386108b3565b8a513d6000823e3d90fd5b6109c9919750863d8811610550576105418183610768565b953861088d565b505050505050505050565b6109f29150843d8611610550576105418183610768565b38610852565b88513d6000823e3d90fd5b5050505050505050565b610a249150833d851161037b5761036d8183610768565b3861082156fea2646970667358221220e7aeaed57ffce9428ca662f35e28ba09a25a1fb35cd871cdc7f7861e65f4a7ea64736f6c63430008130033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 20976,
+        "contract": "contracts/PresalePoolManager.sol:PresalePoolManager",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 26894,
+        "contract": "contracts/PresalePoolManager.sol:PresalePoolManager",
+        "label": "config",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_contract(Configuration)26875"
+      },
+      {
+        "astId": 26897,
+        "contract": "contracts/PresalePoolManager.sol:PresalePoolManager",
+        "label": "manager",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_contract(PresaleManager)28064"
+      },
+      {
+        "astId": 26899,
+        "contract": "contracts/PresalePoolManager.sol:PresalePoolManager",
+        "label": "quoter",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_contract(Configuration)26875": {
+        "encoding": "inplace",
+        "label": "contract Configuration",
+        "numberOfBytes": "20"
+      },
+      "t_contract(PresaleManager)28064": {
+        "encoding": "inplace",
+        "label": "contract PresaleManager",
+        "numberOfBytes": "20"
+      }
+    }
+  }
+}

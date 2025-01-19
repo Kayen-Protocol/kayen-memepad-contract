@@ -1,24 +1,29 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-
-const WCHZ = "0x678c34581db0a7808d0aC669d7025f1408C9a3C6";
+import { getNetworkAddresses } from "./constants";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
   const { deployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
 
+  const { chainId } = await ethers.provider.getNetwork();
+  const { wETH } = getNetworkAddresses(chainId);
+
   const configuration = await deployments.get("Configuration");
   const configurationContract = new ethers.Contract(configuration.address, configuration.abi, signer);
-  if (!(await configurationContract.paymentTokenWhitlist(WCHZ))) {
-    const tx1 = await configurationContract.allowTokenForPayment(WCHZ);
+  if (!(await configurationContract.paymentTokenWhitelist(wETH))) {
+    const tx1 = await configurationContract.allowTokenForPayment(wETH);
     await tx1.wait();
   }
+
+  const deadline = (await ethers.provider.getBlock("latest")).timestamp + 100000;
 
   const v3PresaleMaker = await deployments.get("UniswapV3PresaleMaker");
   const contract = new ethers.Contract(v3PresaleMaker.address, v3PresaleMaker.abi, signer);
   const tx = await contract.startWithNewToken(
-    WCHZ,
+    deployer,
+    wETH,
     "Test MEME",
     "TMEME",
     ethers.utils.parseEther("1000000000"),
@@ -30,6 +35,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     0,
     0,
     0,
+    deadline,
     ""
   );
   await tx.wait();

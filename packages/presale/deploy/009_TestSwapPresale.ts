@@ -1,12 +1,14 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-
-const WCHZ = "0x678c34581db0a7808d0aC669d7025f1408C9a3C6";
+import { getNetworkAddresses } from "./constants";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, ethers } = hre;
   const { deployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
+
+  const { chainId } = await ethers.provider.getNetwork();
+  const { wETH } = getNetworkAddresses(chainId);
 
   const presaleManager = await deployments.get("PresaleManager");
   const presaleManagerContract = new ethers.Contract(presaleManager.address, presaleManager.abi, signer);
@@ -29,7 +31,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     try {
       const swapTx = await swapRouterContract.exactInput(
         {
-          path: ethers.utils.solidityPack(["address", "uint24", "address"], [WCHZ, 100, token]),
+          path: ethers.utils.solidityPack(["address", "uint24", "address"], [wETH, 100, token]),
           recipient: deployer,
           deadline: ethers.constants.MaxUint256,
           amountIn: ethers.utils.parseEther("1"),

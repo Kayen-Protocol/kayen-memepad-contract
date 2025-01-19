@@ -43,6 +43,14 @@ export const config: HardhatUserConfig = {
     timeout: 100000000,
   },
   networks: {
+    neoxt4: {
+      url: "https://testnet.rpc.banelabs.org",
+      chainId: 12227332,
+      accounts: require("./secrets.json").privateKey,
+      tags: ["testnet"],
+      saveDeployments: true,
+      gasPrice: 40000000000,
+    },
     chiliz: {
       url: "https://rpc.ankr.com/chiliz/5747708213d21767e4c9839a5930bf488b64e93d2311bdc24125a570a2da1479",
       chainId: 88888,
@@ -64,14 +72,13 @@ export const config: HardhatUserConfig = {
       tags: ["eth_testnet"],
       saveDeployments: true,
     },
-    iliad: {
-      url: "https://testnet.storyrpc.io",
-      chainId: 1513,
+    story_odyssey: {
+      url: "https://odyssey.storyrpc.io",
+      chainId: 1516,
       accounts: require("./secrets.json").privateKey,
       tags: ["stroy_testnet"],
       saveDeployments: true,
-      gasPrice: 1000000000,
-    }
+    },
   },
   namedAccounts: {
     deployer: { default: 0 },
