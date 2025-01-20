@@ -7,7 +7,6 @@ interface NetworkAddresses {
 }
 
 const NETWORK_ADDRESSES: { [key: number]: NetworkAddresses } = {
-<<<<<<< HEAD
   12227332: {
     wETH: "0x1CE16390FD09040486221e912B87551E4e44Ab17",
     FEE_VAULT_ADDRESS: "0x86d36bd2EEfB7974B9D0720Af3418FC7Ca5C8897",
@@ -15,8 +14,6 @@ const NETWORK_ADDRESSES: { [key: number]: NetworkAddresses } = {
     V2_ROUTER: "",
     owner: "",
   },
-=======
->>>>>>> origin/main
   // Sepolia
   11155111: {
     wETH: "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
