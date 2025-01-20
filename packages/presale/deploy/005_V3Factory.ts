@@ -14,8 +14,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   });
 
   const contract = new ethers.Contract(poolFactory.address, poolFactory.abi, signer);
-
   const tx = await contract.enableFeeAmount(100, 1);
+  console.log("================123====================");
+
   await tx.wait();
   const initCodeHash = await contract.callStatic.POOL_INIT_CODE_HASH();
 

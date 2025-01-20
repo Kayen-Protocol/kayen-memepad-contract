@@ -8,7 +8,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const configuration = await deployments.get("Configuration");
   const configurationContract = new ethers.Contract(configuration.address, configuration.abi, signer);
-  const tx = await configurationContract.allowWhitelistedContract("0xdab884eb1fc896244227b1c655bbc8c9dd1b6370");
+  const tx = await configurationContract.allowWhitelistedContract("0xf419974c881137f042d790bd1c85ce51801f7674");
   await tx.wait();
 };
 
