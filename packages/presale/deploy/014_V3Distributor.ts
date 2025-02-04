@@ -12,12 +12,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const signer = await ethers.getSigner(deployer);
   const { chainId } = await ethers.provider.getNetwork();
   
-  const { V2_FACTORY, V2_ROUTER } = getNetworkAddresses(chainId);
+  const { V3_FACTORY, V3_NONFUNGIBLE_POSITION_MANAGER } = getNetworkAddresses(chainId);
 
   const configuration = await deployments.get("Configuration");
+
   const distributor = await deploy("UniswapV3Distributor", {
     from: deployer,
-    args: [configuration.address, V2_FACTORY, V2_ROUTER],
+    args: [configuration.address, V3_FACTORY, V3_NONFUNGIBLE_POSITION_MANAGER],
   });
 
   const contract = new ethers.Contract(configuration.address, configuration.abi, signer);
