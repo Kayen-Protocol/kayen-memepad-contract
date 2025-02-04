@@ -79,6 +79,13 @@ export const config: HardhatUserConfig = {
       saveDeployments: true,
       gasPrice: 1000000000,
     },
+    aeneid: {
+      url: "https://aeneid.storyrpc.io",
+      chainId: 1315,
+      accounts: require("./secrets.json").privateKey,
+      tags: ["aeneid_testnet"],
+      saveDeployments: true,//200.000000007
+    },
   },
   namedAccounts: {
     deployer: { default: 0 },
