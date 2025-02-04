@@ -8,6 +8,7 @@
     "deploy:part1": "yarn hardhat deploy --tags part1",
     "deploy:part2": "yarn hardhat deploy --tags part2",
     "deploy:v2Distributor": "yarn hardhat deploy --tags v2Distributor ",
+    "deploy:v3Distributor": "yarn hardhat deploy --tags v3Distributor ",
     "deploy:test": "yarn hardhat deploy --tags test",
     "deploy:test:swap": "yarn hardhat deploy --tags test:swap",
     "deploy:forge": "forge script --chain 88882 scripts/deploy.sol:Deploy --rpc-url $CHILIZ_RPC_URL --broadcast"
