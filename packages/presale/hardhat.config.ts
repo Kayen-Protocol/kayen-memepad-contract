@@ -84,7 +84,7 @@ export const config: HardhatUserConfig = {
       chainId: 1315,
       accounts: require("./secrets.json").privateKey,
       tags: ["aeneid_testnet"],
-      saveDeployments: true,//200.000000007
+      saveDeployments: true,
     },
   },
   namedAccounts: {
